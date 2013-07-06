@@ -16,10 +16,10 @@ class WP_CLI_Remote_Command extends WP_CLI_Command {
 	/**
 	 * List all of the sites in your WP Remote account.
 	 * 
-	 * @subcommand list-sites
+	 * @subcommand site-list
 	 * @synopsis [--fields=<fields>] [--format=<format>]
 	 */
-	public function list_sites( $args, $assoc_args ) {
+	public function site_list( $args, $assoc_args ) {
 
 		$defaults = array(
 				'fields'      => implode( ',', $this->site_fields ),
@@ -53,10 +53,10 @@ class WP_CLI_Remote_Command extends WP_CLI_Command {
 	/**
 	 * Create a site on WP Remote.
 	 * 
-	 * @subcommand create-site
+	 * @subcommand site-create
 	 * @synopsis <domain> <nicename>
 	 */
-	public function create_site( $args ) {
+	public function site_create( $args ) {
 
 		list( $domain, $nicename ) = $args;
 
@@ -80,10 +80,10 @@ class WP_CLI_Remote_Command extends WP_CLI_Command {
 	/**
 	 * Delete a site on WP Remote.
 	 * 
-	 * @subcommand delete-site
+	 * @subcommand site-delete
 	 * @synopsis <id>
 	 */
-	public function delete_site( $args ) {
+	public function site_delete( $args ) {
 
 		list( $id ) = $args;
 
