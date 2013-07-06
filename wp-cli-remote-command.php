@@ -81,7 +81,7 @@ class WP_CLI_Remote_Command extends WP_CLI_Command {
 	 * Delete a site on WP Remote.
 	 * 
 	 * @subcommand site-delete
-	 * @synopsis <id>
+	 * @synopsis <site-id>
 	 */
 	public function site_delete( $args ) {
 
