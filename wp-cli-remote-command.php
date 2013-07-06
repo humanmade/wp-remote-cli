@@ -31,7 +31,7 @@ class WP_CLI_Remote_Command extends WP_CLI_Command {
 
 		$args = array(
 			'endpoint'     => '/sites/',
-			'request_type' => 'GET', 
+			'method'       => 'GET', 
 			);
 		$response = $this->api_request( $args );
 		if ( is_wp_error( $response ) )
@@ -137,7 +137,7 @@ class WP_CLI_Remote_Command extends WP_CLI_Command {
 
 		$defaults = array(
 			'endpoint'       => '',
-			'request_method' => 'GET',
+			'method'         => 'GET',
 			'headers'        => array(),
 			'body'           => '',
 			);
@@ -148,7 +148,7 @@ class WP_CLI_Remote_Command extends WP_CLI_Command {
 			$request_args['headers']['Basic-Auth'] = base64_encode( $this->user . ':' . $this->password );
 		}
 
-		$request_url = rtrim( $this->api_url, '/' ) . '/' . ltrim( $request_args['endpoint'] );
+		$request_url = rtrim( $this->api_url, '/' ) . '/' . ltrim( $request_args['endpoint'], '/' );
 		$response = wp_remote_request( $request_url, $request_args );
 
 		// Something with the request failed
