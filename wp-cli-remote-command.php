@@ -36,30 +36,26 @@ class WP_CLI_Remote_Command extends WP_CLI_Command {
 			);
 		$assoc_args = array_merge( $defaults, $assoc_args );
 
-		$this->set_account();
+		$this->list_plugins_or_themes_for_site( 'plugins', $site_id, $assoc_args );
+	}
 
-		$args = array(
-			'endpoint'     => '/sites/' . $site_id . '/',
-			'method'       => 'GET', 
+	/**
+	 * List all of the themes installed on a given site.
+	 * 
+	 * @subcommand theme-list
+	 * @synopsis <site-id> [--fields=<fields>] [--format=<format>]
+	 */
+	public function theme_list( $args, $assoc_args ) {
+
+		list( $site_id ) = $args;
+
+		$defaults = array(
+				'fields'      => implode( ',', $this->plugin_fields ),
+				'format'      => 'table',
 			);
-		$response = $this->api_request( $args );
-		if ( is_wp_error( $response ) )
-			WP_CLI::error( $response->get_error_message() );
+		$assoc_args = array_merge( $defaults, $assoc_args );
 
-		$plugin_items = array();
-		foreach( $response->plugins as $response_plugin ) {
-			$plugin_item = new stdClass;
-
-			$plugin_item->name = $response_plugin->name;
-			$plugin_item->status = ( $response_plugin->is_active ) ? 'active' : 'inactive';
-			$plugin_item->update = ( version_compare( $response_plugin->latest_version, $response_plugin->version, '>' ) ) ? 'yes' : 'none';
-			$plugin_item->version = $response_plugin->version;
-
-			$plugin_items[] = $plugin_item;
-		}
-
-		WP_CLI\Utils\format_items( $assoc_args['format'], $plugin_items, $assoc_args['fields'] );
-
+		$this->list_plugins_or_themes_for_site( 'themes', $site_id, $assoc_args );
 	}
 
 	/**
@@ -172,6 +168,36 @@ class WP_CLI_Remote_Command extends WP_CLI_Command {
 
 		WP_CLI::out( trim( $message ) . " " );
 		return trim( fgets( STDIN ) );
+	}
+
+	/**
+	 * Themes and plugins use roughly the same object model.
+	 */
+	private function list_plugins_or_themes_for_site( $object, $site_id, $assoc_args ) {
+
+		$this->set_account();
+
+		$args = array(
+			'endpoint'     => '/sites/' . $site_id . '/',
+			'method'       => 'GET', 
+			);
+		$response = $this->api_request( $args );
+		if ( is_wp_error( $response ) )
+			WP_CLI::error( $response->get_error_message() );
+
+		$items = array();
+		foreach( $response->$object as $response_item ) {
+			$item = new stdClass;
+
+			$item->name = $response_item->name;
+			$item->status = ( $response_item->is_active ) ? 'active' : 'inactive';
+			$item->update = ( version_compare( $response_item->latest_version, $response_item->version, '>' ) ) ? 'yes' : 'none';
+			$item->version = $response_item->version;
+
+			$items[] = $item;
+		}
+
+		WP_CLI\Utils\format_items( $assoc_args['format'], $items, $assoc_args['fields'] );
 	}
 
 	/**
