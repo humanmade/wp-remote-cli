@@ -113,6 +113,10 @@ class WP_CLI_Remote_Command extends WP_CLI_Command {
 		else if ( 401 == wp_remote_retrieve_response_code( $response ) )
 			return new WP_Error( 'WPR-401', 'Invalid account details.' );
 
+		// Object or endpoint not found.
+		else if ( 404 == wp_remote_retrieve_response_code( $response ) )
+			return new WP_Error( 'WPR-404', 'Not found.' );
+
 		// Catch-all
 		else
 			return new WP_Error( 'unknown', "An error occurred that we don't have code for. Please get in touch with WP Remote support or submit a pull request." );
