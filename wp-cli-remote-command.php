@@ -144,8 +144,7 @@ class WP_CLI_Remote_Command extends WP_CLI_Command {
 		$request_args = array_merge( $defaults, $assoc_args );
 
 		if ( ! empty( $this->user ) && ! empty( $this->password ) ) {
-			// @todo figure out the proper headers for basic auth
-			$request_args['headers']['Basic-Auth'] = base64_encode( $this->user . ':' . $this->password );
+			$request_args['headers']['Authorization'] = 'Basic ' . base64_encode( $this->user . ':' . $this->password );
 		}
 
 		$request_url = rtrim( $this->api_url, '/' ) . '/' . ltrim( $request_args['endpoint'], '/' );
