@@ -7,11 +7,60 @@ class WP_CLI_Remote_Command extends WP_CLI_Command {
 	private $user;
 	private $password;
 
+	private $plugin_fields = array(
+			'name',
+			'status',
+			'update',
+			'version',
+		);
+
 	private $site_fields = array(
 			'ID',
 			'nicename',
 			'home_url',
 		);
+
+	/**
+	 * List all of the plugins installed on a given site.
+	 * 
+	 * @subcommand plugin-list
+	 * @synopsis <site-id> [--fields=<fields>] [--format=<format>]
+	 */
+	public function plugin_list( $args, $assoc_args ) {
+
+		list( $site_id ) = $args;
+
+		$defaults = array(
+				'fields'      => implode( ',', $this->plugin_fields ),
+				'format'      => 'table',
+			);
+		$assoc_args = array_merge( $defaults, $assoc_args );
+
+		$this->set_account();
+
+		$args = array(
+			'endpoint'     => '/sites/' . $site_id . '/',
+			'method'       => 'GET', 
+			);
+		$response = $this->api_request( $args );
+		if ( is_wp_error( $response ) )
+			WP_CLI::error( $response->get_error_message() );
+
+		$plugin_items = array();
+		foreach( $response->plugins as $response_plugin ) {
+			$plugin_item = new stdClass;
+
+			$plugin_item->name = $response_plugin->name;
+			$plugin_item->status = ( $response_plugin->is_active ) ? 'active' : 'inactive';
+			$plugin_item->update = ( version_compare( $response_plugin->latest_version, $response_plugin->version, '>' ) ) ? 'yes' : 'none';
+			$plugin_item->version = $response_plugin->version;
+
+			$plugin_items[] = $plugin_item;
+		}
+
+		WP_CLI\Utils\format_items( $assoc_args['format'], $plugin_items, $assoc_args['fields'] );
+
+	}
 
 	/**
 	 * List all of the sites in your WP Remote account.
