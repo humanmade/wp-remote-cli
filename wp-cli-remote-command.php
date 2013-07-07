@@ -98,6 +98,30 @@ class WP_CLI_Remote_Command extends WP_CLI_Command {
 	}
 
 	/**
+	 * Refresh the details for a given site.
+	 * 
+	 * @subcommand site-refresh
+	 * @synopsis <site-id>
+	 */
+	public function site_refresh( $args ) {
+
+		list( $site_id ) = $args;
+
+		$this->set_account();
+
+		$args = array(
+			'endpoint'     => '/sites/' . $site_id . '/refresh_data',
+			'method'       => 'POST',
+			);
+		$response = $this->api_request( $args );
+		if ( is_wp_error( $response ) )
+			WP_CLI::error( $response->get_error_message() );
+
+		WP_CLI::success( "Site refreshed." );
+	}
+
+
+	/**
 	 * Create a site on WP Remote.
 	 * 
 	 * @subcommand site-add
