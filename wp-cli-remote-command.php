@@ -98,10 +98,10 @@ class WP_CLI_Remote_Command extends WP_CLI_Command {
 	/**
 	 * Create a site on WP Remote.
 	 * 
-	 * @subcommand site-create
+	 * @subcommand site-add
 	 * @synopsis <domain> <nicename>
 	 */
-	public function site_create( $args ) {
+	public function site_add( $args ) {
 
 		list( $domain, $nicename ) = $args;
 
