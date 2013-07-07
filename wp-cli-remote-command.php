@@ -20,6 +20,8 @@ class WP_CLI_Remote_Command extends WP_CLI_Command {
 			'home_url',
 		);
 
+	static $unknown_error_message = "An error occurred that we don't have code for. Please get in touch with WP Remote support or submit a pull request.";
+
 	/**
 	 * List all of the plugins installed on a given site.
 	 * 
@@ -243,7 +245,7 @@ class WP_CLI_Remote_Command extends WP_CLI_Command {
 
 		// Catch-all
 		else
-			return new WP_Error( 'unknown', "An error occurred that we don't have code for. Please get in touch with WP Remote support or submit a pull request." );
+			return new WP_Error( 'unknown', self::$unknown_error_message );
 
 	}
 
