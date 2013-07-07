@@ -223,7 +223,7 @@ class WP_CLI_Remote_Command extends WP_CLI_Command {
 
 			$item->name = $response_item->name;
 			$item->status = ( $response_item->is_active ) ? 'active' : 'inactive';
-			$item->update = ( version_compare( $response_item->latest_version, $response_item->version, '>' ) ) ? 'yes' : 'none';
+			$item->update = ( version_compare( $response_item->latest_version, $response_item->version, '>' ) ) ? 'available' : 'none';
 			$item->version = $response_item->version;
 
 			$items[] = $item;
