@@ -121,7 +121,13 @@ class WP_CLI_Remote_Command extends WP_CLI_Command {
 		if ( is_wp_error( $response ) )
 			WP_CLI::error( $response->get_error_message() );
 
-		WP_CLI::success( "Site created." );
+		if ( 'success' == $response->status ) {
+			WP_CLI::success( "Site created." );
+		} else if ( 'error' == $response->status ) {
+			WP_CLI::error( $response->error_message );
+		} else {
+			WP_CLI::error( self::$unknown_error_message );
+		}
 	}
 
 	/**
