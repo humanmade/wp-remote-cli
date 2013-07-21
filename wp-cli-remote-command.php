@@ -61,6 +61,18 @@ class WP_CLI_Remote_Command extends WP_CLI_Command {
 	}
 
 	/**
+	 * Delete a given theme on a given site.
+	 *
+	 * @subcommand theme-delete
+	 * @synopsis <site-id> <theme-name>
+	 */
+	public function theme_delete( $args, $assoc_args ) {
+
+		list( $site_id, $theme_name ) = $args;
+		$this->perform_plugin_or_theme_action_for_site( 'theme', 'delete', $theme_name, $site_id );
+	}
+
+	/**
 	 * List all of the sites in your WP Remote account.
 	 * 
 	 * @subcommand site-list
@@ -230,6 +242,34 @@ class WP_CLI_Remote_Command extends WP_CLI_Command {
 		}
 
 		WP_CLI\Utils\format_items( $assoc_args['format'], $items, $assoc_args['fields'] );
+	}
+
+	/**
+	 * Perform a plugin or theme action for a site.
+	 * 
+	 * @param string        $action     An action like 'install'
+	 */
+	private function perform_plugin_or_theme_action_for_site( $object, $action, $name, $site_id ) {
+
+		$this->set_account();
+
+		$endpoint = array(
+				'sites',
+				$site_id,
+				$object,
+				$name,
+				$action
+			);
+
+		$args = array(
+			'endpoint'     => '/' . implode( '/', $endpoint ) . '/',
+			'method'       => 'POST',
+			);
+		$response = $this->api_request( $args );
+		if ( is_wp_error( $response ) )
+			WP_CLI::error( $response->get_error_message() );
+
+
 	}
 
 	/**
