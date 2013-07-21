@@ -73,6 +73,18 @@ class WP_CLI_Remote_Command extends WP_CLI_Command {
 	}
 
 	/**
+	 * Activate a given theme on a given site.
+	 *
+	 * @subcommand theme-activate
+	 * @synopsis <site-id> <theme-name>
+	 */
+	public function theme_activate( $args ) {
+
+		list( $site_id, $theme_name ) = $args;
+		$this->perform_plugin_or_theme_action_for_site( 'theme', 'activate', $theme_name, $site_id );
+	}
+
+	/**
 	 * Delete a given theme on a given site.
 	 *
 	 * @subcommand theme-delete
