@@ -64,12 +64,12 @@ class WP_CLI_Remote_Command extends WP_CLI_Command {
 	 * Install a given theme on a given site.
 	 *
 	 * @subcommand theme-install
-	 * @synopsis <site-id> <theme-name>
+	 * @synopsis <site-id> <theme-name> [--version=<version>]
 	 */
 	public function theme_install( $args, $assoc_args ) {
 
 		list( $site_id, $theme_name ) = $args;
-		$this->perform_plugin_or_theme_action_for_site( 'theme', 'install', $theme_name, $site_id );
+		$this->perform_plugin_or_theme_action_for_site( 'theme', 'install', $theme_name, $site_id, $assoc_args );
 	}
 
 	/**
@@ -261,7 +261,7 @@ class WP_CLI_Remote_Command extends WP_CLI_Command {
 	 * 
 	 * @param string        $action     An action like 'install'
 	 */
-	private function perform_plugin_or_theme_action_for_site( $object, $action, $name, $site_id ) {
+	private function perform_plugin_or_theme_action_for_site( $object, $action, $name, $site_id, $assoc_args = array() ) {
 
 		$this->set_account();
 
@@ -276,6 +276,7 @@ class WP_CLI_Remote_Command extends WP_CLI_Command {
 		$args = array(
 			'endpoint'     => '/' . implode( '/', $endpoint ) . '/',
 			'method'       => 'POST',
+			'body'         => $assoc_args,
 			);
 		$response = $this->api_request( $args );
 		if ( is_wp_error( $response ) )
