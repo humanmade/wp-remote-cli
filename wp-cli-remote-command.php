@@ -262,8 +262,14 @@ class WP_CLI_Remote_Command extends WP_CLI_Command {
 			return $response;
 
 		// Response was good
-		if ( 200 == wp_remote_retrieve_response_code( $response ) )
-			return json_decode( wp_remote_retrieve_body( $response ) );
+		if ( 200 == wp_remote_retrieve_response_code( $response ) ) {
+			$response_body = json_decode( wp_remote_retrieve_body( $response ) );
+			// Maybe the API returned an error
+			if ( isset( $response_body->status ) && 'error' == $response_body->status )
+				return new WP_Error( $response_body->error_code, $response_body->error_message );
+			else
+				return $response_body;
+		}
 
 		// Invalid user account
 		else if ( 401 == wp_remote_retrieve_response_code( $response ) )
