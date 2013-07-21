@@ -282,7 +282,8 @@ class WP_CLI_Remote_Command extends WP_CLI_Command {
 		if ( is_wp_error( $response ) )
 			WP_CLI::error( $response->get_error_message() );
 
-
+		$action_past_tense = rtrim( $action, 'e' ) . 'ed';
+		WP_CLI::success( sprintf( "%s was %s.", ucwords( $object ), $action_past_tense ) );
 	}
 
 	/**
