@@ -61,6 +61,18 @@ class WP_CLI_Remote_Command extends WP_CLI_Command {
 	}
 
 	/**
+	 * Install a given theme on a given site.
+	 *
+	 * @subcommand theme-install
+	 * @synopsis <site-id> <theme-name>
+	 */
+	public function theme_install( $args, $assoc_args ) {
+
+		list( $site_id, $theme_name ) = $args;
+		$this->perform_plugin_or_theme_action_for_site( 'theme', 'install', $theme_name, $site_id );
+	}
+
+	/**
 	 * Delete a given theme on a given site.
 	 *
 	 * @subcommand theme-delete
