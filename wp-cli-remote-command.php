@@ -20,6 +20,13 @@ class WP_CLI_Remote_Command extends WP_CLI_Command {
 			'home_url',
 		);
 
+	private $site_log_fields = array(
+			'date',
+			'type',
+			'action',
+			'description',
+		);
+
 	static $unknown_error_message = "An error occurred that we don't have code for. Please get in touch with WP Remote support or submit a pull request.";
 
 	/**
@@ -203,6 +210,64 @@ class WP_CLI_Remote_Command extends WP_CLI_Command {
 		}
 
 		WP_CLI\Utils\format_items( $assoc_args['format'], $site_items, $assoc_args['fields'] );
+	}
+
+	/**
+	 * View the log for a given site.
+	 *
+	 * @subcommand site-log
+	 * @synopsis <site-id> [--<field>=<value>] [--format=<format>]
+	 */
+	public function site_log( $args, $assoc_args ) {
+
+		list( $site_id ) = $args;
+
+		$defaults = array(
+				'fields'      => implode( ',', $this->site_log_fields ),
+				'format'      => 'table',
+			);
+		$assoc_args = array_merge( $defaults, $assoc_args );
+
+		$this->set_account();
+
+		$args = array(
+			'endpoint'     => '/sites/' . $site_id . '/log/',
+			'method'       => 'GET',
+			);
+		$response = $this->api_request( $args );
+		if ( is_wp_error( $response ) )
+			WP_CLI::error( $response->get_error_message() );
+
+		$site_log_items = array();
+		foreach( $response as $response_log_item ) {
+			$site_log_item = new stdClass;
+
+			foreach( explode( ',', $assoc_args['fields'] ) as $field ) {
+				$site_log_item->$field = $response_log_item->$field;
+			}
+
+			// 'description' sometimes has HTML
+			$site_log_item->description = strip_tags( $site_log_item->description );
+
+			// 'date' is already delivered as a timestamp
+			$site_log_item->date = date( 'Y-m-d H:i:s', $site_log_item->date ) . ' GMT';
+
+			// Allow filtering based on field
+			$continue = false;
+			foreach( $this->site_log_fields as $site_log_field ) {
+				if ( isset( $assoc_args[$site_log_field] ) 
+					&& $response_log_item->$site_log_field != $assoc_args[$site_log_field] )
+					$continue = true;
+			}
+
+			if ( $continue )
+				continue;
+
+			$site_log_items[] = $site_log_item;
+		}
+
+		WP_CLI\Utils\format_items( $assoc_args['format'], $site_log_items, $assoc_args['fields'] );
+
 	}
 
 	/**
