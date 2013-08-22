@@ -49,6 +49,66 @@ class WP_CLI_Remote_Command extends WP_CLI_Command {
 	}
 
 	/**
+	 * Install a given plugin on a given site.
+	 *
+	 * @subcommand plugin-install
+	 * @synopsis <site-id> <plugin-name> [--version=<version>]
+	 */
+	public function plugin_install( $args, $assoc_args ) {
+
+		list( $site_id, $plugin_name ) = $args;
+		$this->perform_plugin_or_theme_action_for_site( 'plugin', 'install', $plugin_name, $site_id, $assoc_args );
+	}
+
+	/**
+	 * Activate a given plugin on a given site.
+	 *
+	 * @subcommand plugin-activate
+	 * @synopsis <site-id> <plugin-name>
+	 */
+	public function plugin_activate( $args ) {
+
+		list( $site_id, $plugin_name ) = $args;
+		$this->perform_plugin_or_theme_action_for_site( 'plugin', 'activate', $plugin_name, $site_id );
+	}
+
+	/**
+	 * Deactivate a given plugin on a given site.
+	 *
+	 * @subcommand plugin-deactivate
+	 * @synopsis <site-id> <plugin-name>
+	 */
+	public function plugin_deactivate( $args ) {
+
+		list( $site_id, $plugin_name ) = $args;
+		$this->perform_plugin_or_theme_action_for_site( 'plugin', 'deactivate', $plugin_name, $site_id );
+	}
+
+	/**
+	 * Update a given plugin on a given site.
+	 *
+	 * @subcommand plugin-update
+	 * @synopsis <site-id> <plugin-name>
+	 */
+	public function plugin_update( $args ) {
+
+		list( $site_id, $plugin_name ) = $args;
+		$this->perform_plugin_or_theme_action_for_site( 'plugin', 'update', $plugin_name, $site_id );
+	}
+
+	/**
+	 * Uninstall a given plugin on a given site.
+	 *
+	 * @subcommand plugin-uninstall
+	 * @synopsis <site-id> <plugin-name>
+	 */
+	public function plugin_uninstall( $args, $assoc_args ) {
+
+		list( $site_id, $plugin_name ) = $args;
+		$this->perform_plugin_or_theme_action_for_site( 'plugin', 'uninstall', $plugin_name, $site_id );
+	}
+
+	/**
 	 * List all of the themes installed on a given site.
 	 * 
 	 * @subcommand theme-list
@@ -65,6 +125,54 @@ class WP_CLI_Remote_Command extends WP_CLI_Command {
 		$assoc_args = array_merge( $defaults, $assoc_args );
 
 		$this->list_plugins_or_themes_for_site( 'themes', $site_id, $assoc_args );
+	}
+
+	/**
+	 * Install a given theme on a given site.
+	 *
+	 * @subcommand theme-install
+	 * @synopsis <site-id> <theme-name> [--version=<version>]
+	 */
+	public function theme_install( $args, $assoc_args ) {
+
+		list( $site_id, $theme_name ) = $args;
+		$this->perform_plugin_or_theme_action_for_site( 'theme', 'install', $theme_name, $site_id, $assoc_args );
+	}
+
+	/**
+	 * Activate a given theme on a given site.
+	 *
+	 * @subcommand theme-activate
+	 * @synopsis <site-id> <theme-name>
+	 */
+	public function theme_activate( $args ) {
+
+		list( $site_id, $theme_name ) = $args;
+		$this->perform_plugin_or_theme_action_for_site( 'theme', 'activate', $theme_name, $site_id );
+	}
+
+	/**
+	 * Update a given theme on a given site.
+	 *
+	 * @subcommand theme-update
+	 * @synopsis <site-id> <theme-name>
+	 */
+	public function theme_update( $args ) {
+
+		list( $site_id, $theme_name ) = $args;
+		$this->perform_plugin_or_theme_action_for_site( 'theme', 'update', $theme_name, $site_id );
+	}
+
+	/**
+	 * Delete a given theme on a given site.
+	 *
+	 * @subcommand theme-delete
+	 * @synopsis <site-id> <theme-name>
+	 */
+	public function theme_delete( $args, $assoc_args ) {
+
+		list( $site_id, $theme_name ) = $args;
+		$this->perform_plugin_or_theme_action_for_site( 'theme', 'delete', $theme_name, $site_id );
 	}
 
 	/**
@@ -287,6 +395,36 @@ class WP_CLI_Remote_Command extends WP_CLI_Command {
 	}
 
 	/**
+	 * Perform a plugin or theme action for a site.
+	 * 
+	 * @param string        $action     An action like 'install'
+	 */
+	private function perform_plugin_or_theme_action_for_site( $object, $action, $name, $site_id, $assoc_args = array() ) {
+
+		$this->set_account();
+
+		$endpoint = array(
+				'sites',
+				$site_id,
+				$object,
+				$name,
+				$action
+			);
+
+		$args = array(
+			'endpoint'     => '/' . implode( '/', $endpoint ) . '/',
+			'method'       => 'POST',
+			'body'         => $assoc_args,
+			);
+		$response = $this->api_request( $args );
+		if ( is_wp_error( $response ) )
+			WP_CLI::error( $response->get_error_message() );
+
+		$action_past_tense = rtrim( $action, 'e' ) . 'ed';
+		WP_CLI::success( sprintf( "%s was %s.", ucwords( $object ), $action_past_tense ) );
+	}
+
+	/**
 	 * Make a call to the API.
 	 */
 	private function api_request( $assoc_args ) {
@@ -316,8 +454,14 @@ class WP_CLI_Remote_Command extends WP_CLI_Command {
 			return $response;
 
 		// Response was good
-		if ( 200 == wp_remote_retrieve_response_code( $response ) )
-			return json_decode( wp_remote_retrieve_body( $response ) );
+		if ( 200 == wp_remote_retrieve_response_code( $response ) ) {
+			$response_body = json_decode( wp_remote_retrieve_body( $response ) );
+			// Maybe the API returned an error
+			if ( isset( $response_body->status ) && 'error' == $response_body->status )
+				return new WP_Error( $response_body->error_code, $response_body->error_message );
+			else
+				return $response_body;
+		}
 
 		// Invalid user account
 		else if ( 401 == wp_remote_retrieve_response_code( $response ) )
