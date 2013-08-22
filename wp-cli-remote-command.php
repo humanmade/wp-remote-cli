@@ -23,6 +23,24 @@ class WP_CLI_Remote_Command extends WP_CLI_Command {
 	static $unknown_error_message = "An error occurred that we don't have code for. Please get in touch with WP Remote support or submit a pull request.";
 
 	/**
+	 * Install a given plugin on a given site.
+	 *
+	 * @subcommand plugin-install
+	 * @synopsis <site-id> <plugin-name> [--version=<version>] [--activate]
+	 */
+	public function plugin_install( $args, $assoc_args ) {
+
+		list( $site_id, $plugin_name ) = $args;
+
+		$defaults = array(
+				'version' => '',
+				'activate' => false,
+			);
+		
+
+	}
+
+	/**
 	 * List all of the plugins installed on a given site.
 	 * 
 	 * @subcommand plugin-list
