@@ -216,7 +216,7 @@ class WP_CLI_Remote_Command extends WP_CLI_Command {
 	 * View the log for a given site.
 	 *
 	 * @subcommand site-log
-	 * @synopsis <site-id>
+	 * @synopsis <site-id> [--<field>=<value>] [--format=<format>]
 	 */
 	public function site_log( $args, $assoc_args ) {
 
@@ -251,6 +251,17 @@ class WP_CLI_Remote_Command extends WP_CLI_Command {
 
 			// 'date' is already delivered as a timestamp
 			$site_log_item->date = date( 'Y-m-d H:i:s', $site_log_item->date ) . ' GMT';
+
+			// Allow filtering based on field
+			$continue = false;
+			foreach( $this->site_log_fields as $site_log_field ) {
+				if ( isset( $assoc_args[$site_log_field] ) 
+					&& $response_log_item->$site_log_field != $assoc_args[$site_log_field] )
+					$continue = true;
+			}
+
+			if ( $continue )
+				continue;
 
 			$site_log_items[] = $site_log_item;
 		}
