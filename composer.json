@@ -1,0 +1,15 @@
+{
+    "name": "humanmade/wp-cli-remote-command",
+    "description": "Manage your WordPress sites using WP Remote and WP-CLI.",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Humanmade",
+            "email": "hello@hmn.md"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+
+    }
+}
