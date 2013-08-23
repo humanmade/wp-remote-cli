@@ -11,5 +11,8 @@
     "minimum-stability": "dev",
     "require": {
 
+    },
+    "autoload": {
+        "files": [ "wp-cli-remote-command.php" ]
     }
 }
