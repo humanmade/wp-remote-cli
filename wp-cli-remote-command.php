@@ -464,9 +464,12 @@ class WP_CLI_Remote_Command extends WP_CLI_Command {
 		if ( is_wp_error( $response ) )
 			return $response;
 
+		$response_code = wp_remote_retrieve_response_code( $response );
+		$response_body = wp_remote_retrieve_body( $response );
+
 		// Response was good
-		if ( 200 == wp_remote_retrieve_response_code( $response ) ) {
-			$response_body = json_decode( wp_remote_retrieve_body( $response ) );
+		if ( 200 == $response_code ) {
+			$response_body = json_decode( $response_body );
 			// Maybe the API returned an error
 			if ( isset( $response_body->status ) && 'error' == $response_body->status )
 				return new WP_Error( $response_body->error_code, $response_body->error_message );
@@ -475,12 +478,16 @@ class WP_CLI_Remote_Command extends WP_CLI_Command {
 		}
 
 		// Invalid user account
-		else if ( 401 == wp_remote_retrieve_response_code( $response ) )
+		else if ( 401 == $response_code )
 			return new WP_Error( 'WPR-401', 'Invalid account details.' );
 
 		// Object or endpoint not found.
-		else if ( 404 == wp_remote_retrieve_response_code( $response ) )
+		else if ( 404 == $response_code )
 			return new WP_Error( 'WPR-404', 'Not found.' );
+
+		// Sometimes server exceptions have messages
+		else if ( in_array( $response_code, array( 500, 501, 502, 503, 504, 505 ) ) && $response_body )
+			return new WP_Error( 'WPR-' . $response_code, $response_body );
 
 		// Catch-all
 		else
