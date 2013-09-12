@@ -60,60 +60,60 @@ class WP_CLI_Remote_Command extends WP_CLI_Command {
 	 * Install a given plugin on a given site.
 	 *
 	 * @subcommand plugin-install
-	 * @synopsis <site-id> <plugin-name> [--version=<version>]
+	 * @synopsis <site-id> <plugin-slug> [--version=<version>]
 	 */
 	public function plugin_install( $args, $assoc_args ) {
 
-		list( $site_id, $plugin_name ) = $args;
-		$this->perform_plugin_or_theme_action_for_site( 'plugin', 'install', $plugin_name, $site_id, $assoc_args );
+		list( $site_id, $plugin_slug ) = $args;
+		$this->perform_plugin_or_theme_action_for_site( 'plugin', 'install', $plugin_slug, $site_id, $assoc_args );
 	}
 
 	/**
 	 * Activate a given plugin on a given site.
 	 *
 	 * @subcommand plugin-activate
-	 * @synopsis <site-id> <plugin-name>
+	 * @synopsis <site-id> <plugin-slug>
 	 */
 	public function plugin_activate( $args ) {
 
-		list( $site_id, $plugin_name ) = $args;
-		$this->perform_plugin_or_theme_action_for_site( 'plugin', 'activate', $plugin_name, $site_id );
+		list( $site_id, $plugin_slug ) = $args;
+		$this->perform_plugin_or_theme_action_for_site( 'plugin', 'activate', $plugin_slug, $site_id );
 	}
 
 	/**
 	 * Deactivate a given plugin on a given site.
 	 *
 	 * @subcommand plugin-deactivate
-	 * @synopsis <site-id> <plugin-name>
+	 * @synopsis <site-id> <plugin-slug>
 	 */
 	public function plugin_deactivate( $args ) {
 
-		list( $site_id, $plugin_name ) = $args;
-		$this->perform_plugin_or_theme_action_for_site( 'plugin', 'deactivate', $plugin_name, $site_id );
+		list( $site_id, $plugin_slug ) = $args;
+		$this->perform_plugin_or_theme_action_for_site( 'plugin', 'deactivate', $plugin_slug, $site_id );
 	}
 
 	/**
 	 * Update a given plugin on a given site.
 	 *
 	 * @subcommand plugin-update
-	 * @synopsis <site-id> <plugin-name>
+	 * @synopsis <site-id> <plugin-slug>
 	 */
 	public function plugin_update( $args ) {
 
-		list( $site_id, $plugin_name ) = $args;
-		$this->perform_plugin_or_theme_action_for_site( 'plugin', 'update', $plugin_name, $site_id );
+		list( $site_id, $plugin_slug ) = $args;
+		$this->perform_plugin_or_theme_action_for_site( 'plugin', 'update', $plugin_slug, $site_id );
 	}
 
 	/**
 	 * Uninstall a given plugin on a given site.
 	 *
 	 * @subcommand plugin-uninstall
-	 * @synopsis <site-id> <plugin-name>
+	 * @synopsis <site-id> <plugin-slug>
 	 */
 	public function plugin_uninstall( $args, $assoc_args ) {
 
-		list( $site_id, $plugin_name ) = $args;
-		$this->perform_plugin_or_theme_action_for_site( 'plugin', 'uninstall', $plugin_name, $site_id );
+		list( $site_id, $plugin_slug ) = $args;
+		$this->perform_plugin_or_theme_action_for_site( 'plugin', 'uninstall', $plugin_slug, $site_id );
 	}
 
 	/**
