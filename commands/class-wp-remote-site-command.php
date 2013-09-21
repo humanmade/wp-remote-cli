@@ -67,6 +67,30 @@ class WP_Remote_Site_Command extends WP_Remote_Command {
 		}
 
 		WP_CLI\Utils\format_items( $assoc_args['format'], $site_history_items, $assoc_args['fields'] );
+	}
+
+	/**
+	 * Refresh the details for the remote site
+	 * 
+	 * @subcommand refresh
+	 * @synopsis --site-id=<site-id>
+	 */
+	public function site_refresh( $args, $assoc_args ) {
+
+		$site_id = $assoc_args['site-id'];
+		unset( $assoc_args['site-id'] );
+
+		$this->set_account();
+
+		$args = array(
+			'endpoint'     => '/sites/' . (int)$site_id . '/refresh_data',
+			'method'       => 'POST',
+			);
+		$response = $this->api_request( $args );
+		if ( is_wp_error( $response ) )
+			WP_CLI::error( $response->get_error_message() );
+
+		WP_CLI::success( "Site refreshed." );
 	}	
 
 }
