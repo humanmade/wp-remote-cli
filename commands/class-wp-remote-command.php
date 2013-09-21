@@ -60,8 +60,7 @@ class WP_Remote_Command extends WP_CLI_Command {
 			$item = new stdClass;
 
 			$item->name = $response_item->name;
-			if ( 'plugins' == $object )
-				$item->slug = $response_item->slug;
+			$item->slug = $response_item->slug;
 			$item->status = ( $response_item->is_active ) ? 'active' : 'inactive';
 			$item->update = ( version_compare( $response_item->latest_version, $response_item->version, '>' ) ) ? 'available' : 'none';
 			$item->version = $response_item->version;
