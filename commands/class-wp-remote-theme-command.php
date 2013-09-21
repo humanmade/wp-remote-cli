@@ -63,18 +63,18 @@ class WP_Remote_Theme_Command extends WP_Remote_Command {
 	}
 
 	/**
-	 * Deactivate a given theme on the remote site.
+	 * Delete a given theme on the remote site.
 	 *
-	 * @subcommand deactivate
+	 * @subcommand delete
 	 * @synopsis <theme> --site-id=<site-id>
 	 */
-	public function deactivate( $args, $assoc_args ) {
+	public function delete( $args, $assoc_args ) {
 
 		$site_id = $assoc_args['site-id'];
 		unset( $assoc_args['site-id'] );
 
 		list( $theme_slug ) = $args;
-		$this->perform_plugin_or_theme_action_for_site( 'theme', 'deactivate', $theme_slug, $site_id );
+		$this->perform_plugin_or_theme_action_for_site( 'theme', 'delete', $theme_slug, $site_id );
 	}
 
 	/**
@@ -90,21 +90,6 @@ class WP_Remote_Theme_Command extends WP_Remote_Command {
 
 		list( $theme_slug ) = $args;
 		$this->perform_plugin_or_theme_action_for_site( 'theme', 'update', $theme_slug, $site_id );
-	}
-
-	/**
-	 * Uninstall a given theme on the remote site.
-	 *
-	 * @subcommand uninstall
-	 * @synopsis <theme> --site-id=<site-id>
-	 */
-	public function uninstall( $args, $assoc_args ) {
-
-		$site_id = $assoc_args['site-id'];
-		unset( $assoc_args['site-id'] );
-
-		list( $theme_slug ) = $args;
-		$this->perform_plugin_or_theme_action_for_site( 'theme', 'uninstall', $theme_slug, $site_id );
 	}
 
 }
