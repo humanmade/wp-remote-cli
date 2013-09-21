@@ -14,6 +14,8 @@ class WP_Remote_Command extends WP_CLI_Command {
 	protected $user;
 	protected $password;
 
+	static $unknown_error_message = "An error occurred that we don't have code for. Please get in touch with WP Remote support or submit a pull request.";
+
 	/**
 	 * Set the WP Remote user account
 	 */

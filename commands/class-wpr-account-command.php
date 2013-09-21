@@ -47,6 +47,56 @@ class WPR_Account_Command extends WP_Remote_Command {
 		WP_CLI\Utils\format_items( $assoc_args['format'], $site_items, $assoc_args['fields'] );
 	}
 
+	/**
+	 * Add a site to WP Remote.
+	 * 
+	 * @subcommand add-site
+	 * @synopsis <domain> <nicename>
+	 */
+	public function add_site( $args ) {
+
+		list( $domain, $nicename ) = $args;
+
+		$this->set_account();
+
+		$args = array(
+			'endpoint'     => '/sites/',
+			'method'       => 'POST',
+			'body'         => array(
+					'domain'   => $domain,
+					'nicename' => $nicename,
+				),
+			);
+		$response = $this->api_request( $args );
+		if ( is_wp_error( $response ) )
+			WP_CLI::error( $response->get_error_message() );
+
+		WP_CLI::success( "Site added." );
+	}
+
+	/**
+	 * Delete a site on WP Remote.
+	 * 
+	 * @subcommand delete-site
+	 * @synopsis <site-id>
+	 */
+	public function delete_site( $args ) {
+
+		list( $site_id ) = $args;
+
+		$this->set_account();
+
+		$args = array(
+			'endpoint'     => '/sites/' . (int)$site_id . '/',
+			'method'       => 'DELETE',
+		);
+		$response = $this->api_request( $args );
+		if ( is_wp_error( $response ) )
+			WP_CLI::error( $response->get_error_message() );
+
+		WP_CLI::success( "Site deleted." );
+	}
+
 }
 
 WP_CLI::add_command( 'wpr-account', 'WPR_Account_Command' );

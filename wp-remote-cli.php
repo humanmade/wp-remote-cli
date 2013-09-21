@@ -187,63 +187,6 @@ class WP_CLI_Remote_Command extends WP_CLI_Command {
 		WP_CLI::success( "Site refreshed." );
 	}
 
-
-	/**
-	 * Create a site on WP Remote.
-	 * 
-	 * @subcommand site-add
-	 * @synopsis <domain> <nicename>
-	 */
-	public function site_add( $args ) {
-
-		list( $domain, $nicename ) = $args;
-
-		$this->set_account();
-
-		$args = array(
-			'endpoint'     => '/sites/',
-			'method'       => 'POST',
-			'body'         => array(
-					'domain'   => $domain,
-					'nicename' => $nicename,
-				),
-			);
-		$response = $this->api_request( $args );
-		if ( is_wp_error( $response ) )
-			WP_CLI::error( $response->get_error_message() );
-
-		if ( 'success' == $response->status ) {
-			WP_CLI::success( "Site created." );
-		} else if ( 'error' == $response->status ) {
-			WP_CLI::error( $response->error_message );
-		} else {
-			WP_CLI::error( self::$unknown_error_message );
-		}
-	}
-
-	/**
-	 * Delete a site on WP Remote.
-	 * 
-	 * @subcommand site-delete
-	 * @synopsis <site-id>
-	 */
-	public function site_delete( $args ) {
-
-		list( $id ) = $args;
-
-		$this->set_account();
-
-		$args = array(
-			'endpoint'     => '/sites/' . $id . '/',
-			'method'       => 'DELETE',
-		);
-		$response = $this->api_request( $args );
-		if ( is_wp_error( $response ) )
-			WP_CLI::error( $response->get_error_message() );
-
-		WP_CLI::success( "Site deleted." );
-	}
-
 	/**
 	 * Set the WP Remote user account
 	 */
