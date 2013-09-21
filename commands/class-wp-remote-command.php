@@ -119,6 +119,7 @@ class WP_Remote_Command extends WP_CLI_Command {
 			'method'         => 'GET',
 			'headers'        => array(),
 			'body'           => '',
+			'timeout'        => 30,
 			);
 		$request_args = array_merge( $defaults, $assoc_args );
 
