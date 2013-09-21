@@ -11,6 +11,9 @@ class WP_Remote_Command extends WP_CLI_Command {
 			'version',
 		);
 
+	protected $user;
+	protected $password;
+
 	/**
 	 * Set the WP Remote user account
 	 */
@@ -102,7 +105,7 @@ class WP_Remote_Command extends WP_CLI_Command {
 	/**
 	 * Make a call to the API.
 	 */
-	private function api_request( $assoc_args ) {
+	protected function api_request( $assoc_args ) {
 
 		if ( defined( 'WP_REMOTE_URL' ) )
 			$this->api_url = rtrim( WP_REMOTE_URL, '/' ) . '/api/json';

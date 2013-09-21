@@ -3,6 +3,7 @@
  * A series of WP Remote commands for WP-CLI
  */
 require_once dirname( __FILE__ ) . '/commands/class-wp-remote-command.php';
+require_once dirname( __FILE__ ) . '/commands/class-wp-remote-core-command.php';
 require_once dirname( __FILE__ ) . '/commands/class-wp-remote-plugin-command.php';
 
 /**
