@@ -4,14 +4,6 @@
  */
 class WP_Remote_Command extends WP_CLI_Command {
 
-	private $plugin_fields = array(
-			'name',
-			'slug',
-			'status',
-			'update',
-			'version',
-		);
-
 	private $theme_fields = array(
 			'name',
 			'status',
