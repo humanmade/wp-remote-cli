@@ -14,12 +14,19 @@ class WP_Remote_Command extends WP_CLI_Command {
 	protected $user;
 	protected $password;
 
+	protected $api_key;
+
 	static $unknown_error_message = "An error occurred that we don't have code for. Please get in touch with WP Remote support or submit a pull request.";
 
 	/**
 	 * Set the WP Remote user account
 	 */
 	protected function set_account() {
+
+		if ( defined( 'WP_REMOTE_API_KEY' ) ) {
+			$this->api_key = WP_REMOTE_API_KEY;
+			return;
+		}
 
 		if ( defined( 'WP_REMOTE_USER' ) )
 			$this->user = WP_REMOTE_USER;
@@ -123,7 +130,9 @@ class WP_Remote_Command extends WP_CLI_Command {
 			);
 		$request_args = array_merge( $defaults, $assoc_args );
 
-		if ( ! empty( $this->user ) && ! empty( $this->password ) ) {
+		if ( ! empty( $this->api_key ) ) {
+			$request_args['headers']['Authorization'] = 'Basic ' . base64_encode( $this->api_key  . ':' );
+		} else if ( ! empty( $this->user ) && ! empty( $this->password ) ) {
 			$request_args['headers']['Authorization'] = 'Basic ' . base64_encode( $this->user . ':' . $this->password );
 		}
 
