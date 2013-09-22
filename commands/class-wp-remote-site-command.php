@@ -135,7 +135,7 @@ class WP_Remote_Site_Command extends WP_Remote_Command {
 		if ( is_wp_error( $response ) )
 			WP_CLI::error( $response->get_error_message() );
 
-		WP_CLI::launch( sprintf( "wget %s", $response->url ) );
+		WP_CLI::launch( sprintf( "wget '%s'", $response->url ) );
 
 		WP_CLI::success( "Site downloaded." );
 	}
