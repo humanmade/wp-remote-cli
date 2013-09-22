@@ -254,6 +254,30 @@ class WP_Remote_Backup_Command extends WP_Remote_Command {
 	}
 
 	/**
+	 * Delete the exclude rules for backups
+	 * 
+	 * @subcommand delete-excludes
+	 * @synopsis --site-id=<site-id>
+	 */
+	public function delete_excludes( $args, $assoc_args ) {
+
+		$site_id = $assoc_args['site-id'];
+		$this->set_account();
+
+		$args = array(
+			'endpoint'     => '/sites/' . $site_id . '/backup/exclude',
+			'method'       => 'DELETE',
+		);
+
+		$response = $this->api_request( $args );
+
+		if ( is_wp_error( $response ) )
+			WP_CLI::error( $response->get_error_message() );
+
+		WP_CLI::success( 'Deleted backup exclude rules.' );
+	}
+
+	/**
 	 * Enable automatic backups on a given site
 	 * 
 	 * @subcommand enable-auto-backups
