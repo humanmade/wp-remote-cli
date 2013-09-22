@@ -137,58 +137,6 @@ class WP_Remote_Backup_Command extends WP_Remote_Command {
 	}
 
 	/**
-	 * Initiate a download of the a site, use "download" once complete.
-	 * 
-	 * @subcommand initiate-download
-	 * @synopsis --site-id=<site-id>
-	 */
-	public function initiate_download( $args, $assoc_args ) {
-
-		$site_id = $assoc_args['site-id'];
-		$this->set_account();
-
-		$args = array(
-			'endpoint'     => '/sites/' . $site_id . '/backup/initiate-download',
-			'method'       => 'POST',
-			);
-
-		$response = $this->api_request( $args );
-
-		if ( is_wp_error( $response ) )
-			WP_CLI::error( $response->get_error_message() );
-
-		WP_CLI::success( 'Initiated download of site, run "download" to get the status' );
-
-	}
-
-	/**
-	 * Access the status of an on-demand backup
-	 * 
-	 * @synopsis --site-id=<site-id>
-	 */
-	public function download( $args, $assoc_args ) {
-
-		$site_id = $assoc_args['site-id'];
-		$this->set_account();
-
-		$args = array(
-			'endpoint'     => '/sites/' . $site_id . '/backup/download',
-			'method'       => 'GET',
-			);
-
-		$response = $this->api_request( $args );
-
-		if ( is_wp_error( $response ) )
-			WP_CLI::error( $response->get_error_message() );
-
-		if ( $response->status === 'backup-complete' )
-			WP_Cli::success( $response->url );
-
-		else
-			WP_Cli::error( 'Backup status: ' . $response->status );
-	}
-
-	/**
 	 * List the exclude rules for backups
 	 * 
 	 * @subcommand list-excludes
