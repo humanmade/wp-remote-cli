@@ -112,6 +112,34 @@ class WP_Remote_Backup_Command extends WP_Remote_Command {
 	}
 
 	/**
+	 * Download a given backup for a given site
+	 * 
+	 * @subcommand download
+	 * @synopsis <backup-id> --site-id=<site-id>
+	 */
+	public function download( $args, $assoc_args ) {
+
+		$site_id = $assoc_args['site-id'];
+
+		list( $backup_id ) = $args;
+
+		$this->set_account();
+
+		$args = array(
+			'endpoint'     => '/sites/' . (int)$site_id . '/backup/' . (int)$backup_id,
+			'method'       => 'GET',
+			);
+		$backup = $this->api_request( $args );
+
+		if ( is_wp_error( $backup ) )
+			WP_CLI::error( $backup->get_error_message() );
+
+		WP_CLI::launch( sprintf( "wget '%s'", $backup->url ) );
+
+		WP_CLI::success( "Backup downloaded." );
+	}
+
+	/**
 	 * Delete a given backup for a given site
 	 * 
 	 * @synopsis <backup-id> --site-id=<site-id>
