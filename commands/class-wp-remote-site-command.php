@@ -91,7 +91,54 @@ class WP_Remote_Site_Command extends WP_Remote_Command {
 			WP_CLI::error( $response->get_error_message() );
 
 		WP_CLI::success( "Site refreshed." );
-	}	
+	}
+
+	/**
+	 * Download a remote site.
+	 * 
+	 * @subcommand download
+	 * @synopsis --site-id=<site-id>
+	 */
+	public function download( $args, $assoc_args ) {
+
+		$site_id = $assoc_args['site-id'];
+		$this->set_account();
+
+		$args = array(
+			'endpoint'     => '/sites/' . $site_id . '/download',
+			'method'       => 'POST',
+			);
+
+		$response = $this->api_request( $args );
+
+		if ( is_wp_error( $response ) )
+			WP_CLI::error( $response->get_error_message() );
+
+		WP_CLI::line( "Initiated site archive." );
+
+		do {
+
+			if ( ! empty( $response->status ) ) {
+				WP_Cli::line( 'Backup status: ' . $response->status );
+				sleep( 15 );
+			}
+
+			$args = array(
+			'endpoint'     => '/sites/' . $site_id . '/download',
+			'method'       => 'GET',
+			);
+
+			$response = $this->api_request( $args );
+
+		} while ( ! is_wp_error( $response ) && $response->status != 'backup-complete' );
+
+		if ( is_wp_error( $response ) )
+			WP_CLI::error( $response->get_error_message() );
+
+		WP_CLI::launch( sprintf( "wget '%s'", $response->url ) );
+
+		WP_CLI::success( "Site downloaded." );
+	}
 
 }
 
