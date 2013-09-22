@@ -31,7 +31,7 @@ class WP_Remote_Site_Command extends WP_Remote_Command {
 		$this->set_account();
 
 		$args = array(
-			'endpoint'     => '/sites/' . $site_id . '/log/',
+			'endpoint'     => '/site/' . $site_id . '/log/',
 			'method'       => 'GET',
 			);
 		$response = $this->api_request( $args );
@@ -75,7 +75,7 @@ class WP_Remote_Site_Command extends WP_Remote_Command {
 	 * @subcommand refresh
 	 * @synopsis --site-id=<site-id>
 	 */
-	public function site_refresh( $args, $assoc_args ) {
+	public function refresh( $args, $assoc_args ) {
 
 		$site_id = $assoc_args['site-id'];
 		unset( $assoc_args['site-id'] );
@@ -83,7 +83,7 @@ class WP_Remote_Site_Command extends WP_Remote_Command {
 		$this->set_account();
 
 		$args = array(
-			'endpoint'     => '/sites/' . (int)$site_id . '/refresh_data',
+			'endpoint'     => '/site/' . (int)$site_id . '/refresh_data',
 			'method'       => 'POST',
 			);
 		$response = $this->api_request( $args );
@@ -105,7 +105,7 @@ class WP_Remote_Site_Command extends WP_Remote_Command {
 		$this->set_account();
 
 		$args = array(
-			'endpoint'     => '/sites/' . $site_id . '/download',
+			'endpoint'     => '/site/' . $site_id . '/download',
 			'method'       => 'POST',
 			);
 
@@ -124,7 +124,7 @@ class WP_Remote_Site_Command extends WP_Remote_Command {
 			}
 
 			$args = array(
-			'endpoint'     => '/sites/' . $site_id . '/download',
+			'endpoint'     => '/site/' . $site_id . '/download',
 			'method'       => 'GET',
 			);
 
