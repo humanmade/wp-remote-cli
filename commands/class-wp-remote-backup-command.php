@@ -31,7 +31,7 @@ class WP_Remote_Backup_Command extends WP_Remote_Command {
 		$this->set_account();
 
 		$args = array(
-			'endpoint'     => '/sites/' . $site_id . '/backup',
+			'endpoint'     => '/site/' . $site_id . '/backup',
 			'method'       => 'GET',
 			);
 		$response = $this->api_request( $args );
@@ -90,7 +90,7 @@ class WP_Remote_Backup_Command extends WP_Remote_Command {
 		$this->set_account();
 
 		$args = array(
-			'endpoint'     => '/sites/' . $site_id . '/backup/' . $backup_id,
+			'endpoint'     => '/site/' . $site_id . '/backup/' . $backup_id,
 			'method'       => 'GET',
 			);
 		$backup = $this->api_request( $args );
@@ -126,7 +126,7 @@ class WP_Remote_Backup_Command extends WP_Remote_Command {
 		$this->set_account();
 
 		$args = array(
-			'endpoint'     => '/sites/' . (int)$site_id . '/backup/' . (int)$backup_id,
+			'endpoint'     => '/site/' . (int)$site_id . '/backup/' . (int)$backup_id,
 			'method'       => 'GET',
 			);
 		$backup = $this->api_request( $args );
@@ -152,7 +152,7 @@ class WP_Remote_Backup_Command extends WP_Remote_Command {
 		$this->set_account();
 
 		$args = array(
-			'endpoint'     => '/sites/' . $site_id . '/backup/' . $backup_id,
+			'endpoint'     => '/site/' . $site_id . '/backup/' . $backup_id,
 			'method'       => 'DELETE',
 			);
 
@@ -184,7 +184,7 @@ class WP_Remote_Backup_Command extends WP_Remote_Command {
 		$assoc_args = array_merge( $defaults, $assoc_args );
 
 		$args = array(
-			'endpoint'     => '/sites/' . $site_id . '/backup/exclude',
+			'endpoint'     => '/site/' . $site_id . '/backup/exclude',
 			'method'       => 'GET',
 		);
 
@@ -216,7 +216,7 @@ class WP_Remote_Backup_Command extends WP_Remote_Command {
 		$rules = explode( ',', $args[0] );
 
 		$args = array(
-			'endpoint'     => '/sites/' . $site_id . '/backup/exclude',
+			'endpoint'     => '/site/' . $site_id . '/backup/exclude',
 			'method'       => 'POST',
 			'body'         => array( 'rules' => $rules )
 		);
@@ -241,7 +241,7 @@ class WP_Remote_Backup_Command extends WP_Remote_Command {
 		$this->set_account();
 
 		$args = array(
-			'endpoint'     => '/sites/' . $site_id . '/backup/exclude',
+			'endpoint'     => '/site/' . $site_id . '/backup/exclude',
 			'method'       => 'DELETE',
 		);
 
@@ -267,7 +267,7 @@ class WP_Remote_Backup_Command extends WP_Remote_Command {
 		$rules = explode( ',', $args[0] );
 
 		$args = array(
-			'endpoint'     => '/sites/' . $site_id . '/backup/enable-auto-backup',
+			'endpoint'     => '/site/' . $site_id . '/backup/enable-auto-backup',
 			'method'       => 'POST',
 		);
 
@@ -293,7 +293,7 @@ class WP_Remote_Backup_Command extends WP_Remote_Command {
 		$rules = explode( ',', $args[0] );
 
 		$args = array(
-			'endpoint'     => '/sites/' . $site_id . '/backup/disable-auto-backup',
+			'endpoint'     => '/site/' . $site_id . '/backup/disable-auto-backup',
 			'method'       => 'POST',
 		);
 

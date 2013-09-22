@@ -45,7 +45,7 @@ class WP_Remote_Core_Command extends WP_Remote_Command {
 		$this->set_account();
 
 		$args = array(
-			'endpoint' => 'sites/' . (int)$site_id . '/core/' . $action,
+			'endpoint' => 'site/' . (int)$site_id . '/core/' . $action,
 			'method'   => 'POST'
 			);
 		$response = $this->api_request( $args );

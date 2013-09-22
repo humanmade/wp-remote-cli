@@ -47,7 +47,7 @@ class WP_Remote_Command extends WP_CLI_Command {
 		$this->set_account();
 
 		$args = array(
-			'endpoint'     => '/sites/' . $site_id . '/',
+			'endpoint'     => '/site/' . $site_id . '/',
 			'method'       => 'GET', 
 			);
 		$response = $this->api_request( $args );
@@ -81,7 +81,7 @@ class WP_Remote_Command extends WP_CLI_Command {
 		$this->set_account();
 
 		$endpoint = array(
-				'sites',
+				'site',
 				$site_id,
 				$object,
 				$name,
