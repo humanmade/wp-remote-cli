@@ -27,7 +27,7 @@ class WPR_Account_Command extends WP_Remote_Command {
 		$this->set_account();
 
 		$args = array(
-			'endpoint'     => '/sites/',
+			'endpoint'     => '/site/',
 			'method'       => 'GET', 
 			);
 		$response = $this->api_request( $args );
@@ -60,7 +60,7 @@ class WPR_Account_Command extends WP_Remote_Command {
 		$this->set_account();
 
 		$args = array(
-			'endpoint'     => '/sites/',
+			'endpoint'     => '/site/',
 			'method'       => 'POST',
 			'body'         => array(
 					'domain'   => $domain,
@@ -87,7 +87,7 @@ class WPR_Account_Command extends WP_Remote_Command {
 		$this->set_account();
 
 		$args = array(
-			'endpoint'     => '/sites/' . (int)$site_id . '/',
+			'endpoint'     => '/site/' . (int)$site_id . '/',
 			'method'       => 'DELETE',
 		);
 		$response = $this->api_request( $args );
