@@ -162,7 +162,7 @@ class WP_Remote_Backup_Command extends WP_Remote_Command {
 	}
 
 	/**
-	 * Initiate a download of the a site, use "download" once complete.
+	 * Access the status of an on-demand backup
 	 * 
 	 * @synopsis --site-id=<site-id>
 	 */
