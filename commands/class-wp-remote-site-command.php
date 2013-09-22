@@ -75,7 +75,7 @@ class WP_Remote_Site_Command extends WP_Remote_Command {
 	 * @subcommand refresh
 	 * @synopsis --site-id=<site-id>
 	 */
-	public function site_refresh( $args, $assoc_args ) {
+	public function refresh( $args, $assoc_args ) {
 
 		$site_id = $assoc_args['site-id'];
 		unset( $assoc_args['site-id'] );
