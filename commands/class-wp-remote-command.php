@@ -47,7 +47,7 @@ class WP_Remote_Command extends WP_CLI_Command {
 		$this->set_account();
 
 		$args = array(
-			'endpoint'     => '/site/' . $site_id . '/',
+			'endpoint'     => '/site/' . $site_id . '/' . str_replace( 's', '', $object ),
 			'method'       => 'GET', 
 			);
 		$response = $this->api_request( $args );
@@ -56,7 +56,7 @@ class WP_Remote_Command extends WP_CLI_Command {
 			WP_CLI::error( $response->get_error_message() );
 
 		$items = array();
-		foreach( $response->$object as $response_item ) {
+		foreach( $response as $response_item ) {
 			$item = new stdClass;
 
 			$item->name = $response_item->name;
