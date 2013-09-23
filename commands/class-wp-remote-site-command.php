@@ -33,7 +33,7 @@ class WP_Remote_Site_Command extends WP_Remote_Command {
 		$this->set_account();
 
 		$args = array(
-			'endpoint'     => '/site/' . $site_id . '/log/',
+			'endpoint'     => '/site/' . $site_id . '/history/',
 			'method'       => 'GET',
 			'body'         => array(
 				'per_page' => (int)$assoc_args['per_page'],
