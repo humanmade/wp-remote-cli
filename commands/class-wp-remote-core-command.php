@@ -31,13 +31,13 @@ class WP_Remote_Core_Command extends WP_Remote_Command {
 	 * @synopsis --site-id=<site-id>
 	 */
 	public function unlock_update( $args, $assoc_args ) {
-		$this->perform_action( 'unlock-update', $args, $assoc_args );
+		$this->perform_action( 'lock-update', $args, $assoc_args, 'DELETE' );
 	}
 
 	/**
 	 * Perform one of the WordPress core actions
 	 */
-	private function perform_action( $action, $args, $assoc_args ) {
+	private function perform_action( $action, $args, $assoc_args, $method = 'POST' ) {
 
 		$site_id = $assoc_args['site-id'];
 		unset( $assoc_args['site-id'] );
@@ -46,7 +46,7 @@ class WP_Remote_Core_Command extends WP_Remote_Command {
 
 		$args = array(
 			'endpoint' => 'site/' . (int)$site_id . '/core/' . $action,
-			'method'   => 'POST'
+			'method'   => $method
 			);
 		$response = $this->api_request( $args );
 
