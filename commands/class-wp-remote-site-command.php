@@ -23,7 +23,7 @@ class WP_Remote_Site_Command extends WP_Remote_Command {
 		unset( $assoc_args['site-id'] );
 
 		$defaults = array(
-				'per_page'    => 10,
+				'per-page'    => 10,
 				'page'        => 1,
 				'fields'      => implode( ',', $this->history_fields ),
 				'format'      => 'table',
@@ -36,7 +36,7 @@ class WP_Remote_Site_Command extends WP_Remote_Command {
 			'endpoint'     => '/site/' . $site_id . '/history/',
 			'method'       => 'GET',
 			'body'         => array(
-				'per_page' => (int)$assoc_args['per_page'],
+				'per_page' => (int)$assoc_args['per-page'],
 				'page'     => (int)$assoc_args['page']
 				),
 			);
