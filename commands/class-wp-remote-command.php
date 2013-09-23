@@ -136,6 +136,12 @@ class WP_Remote_Command extends WP_CLI_Command {
 		}
 
 		$request_url = rtrim( $this->api_url, '/' ) . '/' . ltrim( $request_args['endpoint'], '/' );
+
+		if ( 'GET' == $request_args['method'] && is_array( $request_args['body'] ) ) {
+			$request_url = add_query_arg( $request_args['body'], $request_url );
+			unset( $request_args['body'] );
+		}
+
 		$response = wp_remote_request( $request_url, $request_args );
 
 		// Something with the request failed
