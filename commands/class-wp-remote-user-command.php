@@ -27,7 +27,7 @@ class WP_Remote_User_Command extends WP_Remote_Command {
 	 * [--format=<format>]
 	 * : Output list as table, CSV, JSON, or simply IDs. Defaults to table.
 	 * 
-	 * [--site-id=<site-id>]
+	 * --site-id=<site-id>
 	 * : Site to run the command on.
 	 *
 	 * @subcommand list
@@ -96,7 +96,7 @@ class WP_Remote_User_Command extends WP_Remote_Command {
 	 * [--porcelain]
 	 * : Output just the new user id.
 	 * 
-	 * [--site-id=<site-id>]
+	 * --site-id=<site-id>
 	 * : Site to run the command on.
 	 * 
 	 * @subcommand create
@@ -152,7 +152,7 @@ class WP_Remote_User_Command extends WP_Remote_Command {
 	 * --<field>=<value>
 	 * : One or more fields to update. For accepted fields, see wp_update_user().
 	 * 
-	 * [--site-id=<site-id>]
+	 * --site-id=<site-id>
 	 * : Site to run the command on.
 	 */
 	public function update( $args, $assoc_args ) {
@@ -195,7 +195,7 @@ class WP_Remote_User_Command extends WP_Remote_Command {
 	 *
 	 *     **json**: Outputs all fields in JSON format.
 	 * 
-	 * [--site-id=<site-id>]
+	 * --site-id=<site-id>
 	 * : Site to run the command on.
 	 */
 	public function get( $args, $assoc_args ) {
@@ -241,7 +241,7 @@ class WP_Remote_User_Command extends WP_Remote_Command {
 	 * <user>
 	 * : The user login or ID of the user to delete.
 	 * 
-	 * [--site-id=<site-id>]
+	 * --site-id=<site-id>
 	 * : Site to run the command on.
 	 */
 	public function delete( $args, $assoc_args ) {

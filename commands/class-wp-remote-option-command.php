@@ -8,7 +8,7 @@ class WP_Remote_Option_Command extends WP_Remote_Command {
 	 * Get an option on a remote Site.
 	 *
 	 * @subcommand get
-	 * @synopsis <option-name> [--format=<format>] [--site-id=<site-id>]
+	 * @synopsis <option-name> [--format=<format>] --site-id=<site-id>
 	 */
 	public function get( $args, $assoc_args ) {
 		$this->perform_option_action( 'get', $args, $assoc_args );
@@ -18,7 +18,7 @@ class WP_Remote_Option_Command extends WP_Remote_Command {
 	 * Update an option on a remote Site.
 	 *
 	 * @subcommand Update
-	 * @synopsis <option-name> [--site-id=<site-id>]
+	 * @synopsis <option-name> --site-id=<site-id>
 	 */
 	public function update( $args, $assoc_args ) {
 		$this->perform_option_action( 'update', $args, $assoc_args );
@@ -28,7 +28,7 @@ class WP_Remote_Option_Command extends WP_Remote_Command {
 	 * Delete an option on a remote Site.
 	 *
 	 * @subcommand delete
-	 * @synopsis <option-name> [--site-id=<site-id>]
+	 * @synopsis <option-name> --site-id=<site-id>
 	 */
 	public function delete( $args, $assoc_args ) {
 		$this->perform_option_action( 'delete', $args, $assoc_args );
