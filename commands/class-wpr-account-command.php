@@ -8,6 +8,7 @@ class WPR_Account_Command extends WP_Remote_Command {
 			'ID',
 			'nicename',
 			'home_url',
+			'is_premium',
 		);
 
 	/**
@@ -39,7 +40,10 @@ class WPR_Account_Command extends WP_Remote_Command {
 			$site_item = new stdClass;
 
 			foreach( explode( ',', $assoc_args['fields'] ) as $field ) {
-				$site_item->$field = $response_site->$field;
+				if ( $field == 'is_premium' )
+					$site_item->$field = ( $response_site->$field ) ? 'true' : 'false';
+				else 
+					$site_item->$field = $response_site->$field;
 			}
 			$site_items[] = $site_item;
 		}
