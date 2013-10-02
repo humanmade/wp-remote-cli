@@ -101,6 +101,56 @@ class WPR_Account_Command extends WP_Remote_Command {
 		WP_CLI::success( "Site deleted." );
 	}
 
+	/**
+	 * Mark a Site as Premium (requires active subscription)
+	 * 
+	 * @subcommand set-site-premium
+	 * @synopsis --site-id=<site-id>
+	 */
+	public function set_site_premium( $args, $assoc_args ) {
+
+		$site_id = $assoc_args['site-id'];
+		unset( $assoc_args['site-id'] );
+
+		$this->set_account();
+
+		$args = array(
+			'endpoint'     => '/site/' . (int)$site_id . '/premium',
+			'method'       => 'POST',
+			);
+		$response = $this->api_request( $args );
+		if ( is_wp_error( $response ) )
+			WP_CLI::error( $response->get_error_message() );
+
+		WP_CLI::success( "Site is now Premium." );
+
+	}
+
+	/**
+	 * Remove Premium from a Site.
+	 * 
+	 * @subcommand remove-site-premium
+	 * @synopsis --site-id=<site-id>
+	 */
+	public function remove_site_premium( $args, $assoc_args ) {
+
+		$site_id = $assoc_args['site-id'];
+		unset( $assoc_args['site-id'] );
+
+		$this->set_account();
+
+		$args = array(
+			'endpoint'     => '/site/' . (int)$site_id . '/premium',
+			'method'       => 'DELETE',
+			);
+		$response = $this->api_request( $args );
+		if ( is_wp_error( $response ) )
+			WP_CLI::error( $response->get_error_message() );
+
+		WP_CLI::success( "Premium has been removed from Site." );
+
+	}
+
 }
 
 WP_CLI::add_command( 'wpr-account', 'WPR_Account_Command' );
