@@ -10,6 +10,7 @@ class WP_Remote_Plugin_Command extends WP_Remote_Command {
 			'status',
 			'update',
 			'version',
+			'update_locked',
 		);
 
 	/**
