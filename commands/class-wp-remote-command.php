@@ -64,6 +64,7 @@ class WP_Remote_Command extends WP_CLI_Command {
 			$item->status = ( $response_item->is_active ) ? 'active' : 'inactive';
 			$item->update = ( version_compare( $response_item->latest_version, $response_item->version, '>' ) ) ? 'available' : 'none';
 			$item->version = $response_item->version;
+			$item->update_locked = ( $response_item->is_locked ) ? 'true' : 'false';
 
 			$items[] = $item;
 		}
@@ -93,6 +94,12 @@ class WP_Remote_Command extends WP_CLI_Command {
 			'method'       => 'POST',
 			'body'         => $assoc_args,
 			);
+
+		if ( 'unlock-update' == $action ) {
+			$args['endpoint'] = str_replace( 'unlock-update', 'lock-update', $args['endpoint'] );
+			$args['method'] = 'DELETE';
+		}
+
 		$response = $this->api_request( $args );
 		if ( is_wp_error( $response ) )
 			WP_CLI::error( $response->get_error_message() );

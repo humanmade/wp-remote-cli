@@ -100,6 +100,54 @@ class WP_Remote_Site_Command extends WP_Remote_Command {
 	}
 
 	/**
+	 * Lock all updates for the remote site.
+	 * 
+	 * @subcommand lock-update
+	 * @synopsis --site-id=<site-id>
+	 */
+	public function lock_update( $args, $assoc_args ) {
+
+		$site_id = $assoc_args['site-id'];
+		unset( $assoc_args['site-id'] );
+
+		$this->set_account();
+
+		$args = array(
+			'endpoint'     => '/site/' . (int)$site_id . '/lock',
+			'method'       => 'POST',
+			);
+		$response = $this->api_request( $args );
+		if ( is_wp_error( $response ) )
+			WP_CLI::error( $response->get_error_message() );
+
+		WP_CLI::success( "All updates are locked for Site." );
+	}
+
+	/**
+	 * Permit updates to be performed on Site.
+	 * 
+	 * @subcommand unlock-update
+	 * @synopsis --site-id=<site-id>
+	 */
+	public function unlock_update( $args, $assoc_args ) {
+
+		$site_id = $assoc_args['site-id'];
+		unset( $assoc_args['site-id'] );
+
+		$this->set_account();
+
+		$args = array(
+			'endpoint'     => '/site/' . (int)$site_id . '/lock',
+			'method'       => 'DELETE',
+			);
+		$response = $this->api_request( $args );
+		if ( is_wp_error( $response ) )
+			WP_CLI::error( $response->get_error_message() );
+
+		WP_CLI::success( "Updates can be performed for Site." );
+	}
+
+	/**
 	 * Download a remote site.
 	 * 
 	 * @subcommand download
