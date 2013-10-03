@@ -108,6 +108,36 @@ class WP_Remote_Plugin_Command extends WP_Remote_Command {
 		$this->perform_plugin_or_theme_action_for_site( 'plugin', 'uninstall', $plugin_slug, $site_id );
 	}
 
+	/**
+	 * Lock updates on a given plugin for the remote site.
+	 *
+	 * @subcommand lock-update
+	 * @synopsis <plugin-slug> --site-id=<site-id>
+	 */
+	public function lock_update( $args, $assoc_args ) {
+
+		$site_id = $assoc_args['site-id'];
+		unset( $assoc_args['site-id'] );
+
+		list( $plugin_slug ) = $args;
+		$this->perform_plugin_or_theme_action_for_site( 'plugin', 'lock-update', $plugin_slug, $site_id );
+	}
+
+	/**
+	 * Unlock updates on a given plugin for the remote site.
+	 *
+	 * @subcommand unlock-update
+	 * @synopsis <plugin-slug> --site-id=<site-id>
+	 */
+	public function unlock_update( $args, $assoc_args ) {
+
+		$site_id = $assoc_args['site-id'];
+		unset( $assoc_args['site-id'] );
+
+		list( $plugin_slug ) = $args;
+		$this->perform_plugin_or_theme_action_for_site( 'plugin', 'unlock-update', $plugin_slug, $site_id );
+	}
+
 }
 
 WP_CLI::add_command( 'remote-plugin', 'WP_Remote_Plugin_Command' );

@@ -94,6 +94,12 @@ class WP_Remote_Command extends WP_CLI_Command {
 			'method'       => 'POST',
 			'body'         => $assoc_args,
 			);
+
+		if ( 'unlock-update' == $action ) {
+			$args['endpoint'] = str_replace( 'unlock-update', 'lock-update', $args['endpoint'] );
+			$args['method'] = 'DELETE';
+		}
+
 		$response = $this->api_request( $args );
 		if ( is_wp_error( $response ) )
 			WP_CLI::error( $response->get_error_message() );

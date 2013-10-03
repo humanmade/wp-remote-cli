@@ -93,6 +93,36 @@ class WP_Remote_Theme_Command extends WP_Remote_Command {
 		$this->perform_plugin_or_theme_action_for_site( 'theme', 'update', $theme_slug, $site_id );
 	}
 
+	/**
+	 * Lock updates on a given theme for the remote site.
+	 *
+	 * @subcommand lock-update
+	 * @synopsis <theme> --site-id=<site-id>
+	 */
+	public function lock_update( $args, $assoc_args ) {
+
+		$site_id = $assoc_args['site-id'];
+		unset( $assoc_args['site-id'] );
+
+		list( $theme_slug ) = $args;
+		$this->perform_plugin_or_theme_action_for_site( 'theme', 'lock-update', $theme_slug, $site_id );
+	}
+
+	/**
+	 * Unlock updates on a given theme for the remote site.
+	 *
+	 * @subcommand unlock-update
+	 * @synopsis <theme> --site-id=<site-id>
+	 */
+	public function unlock_update( $args, $assoc_args ) {
+
+		$site_id = $assoc_args['site-id'];
+		unset( $assoc_args['site-id'] );
+
+		list( $theme_slug ) = $args;
+		$this->perform_plugin_or_theme_action_for_site( 'theme', 'unlock-update', $theme_slug, $site_id );
+	}
+
 }
 
 WP_CLI::add_command( 'remote-theme', 'WP_Remote_Theme_Command' );
