@@ -37,7 +37,7 @@ class WP_Remote_Plugin_Command extends WP_Remote_Command {
 	 * Install a given plugin on the remote site.
 	 *
 	 * @subcommand install
-	 * @synopsis <plugin-slug> --site-id=<site-id> [--version=<version>]
+	 * @synopsis <plugin> --site-id=<site-id> [--version=<version>]
 	 */
 	public function install( $args, $assoc_args ) {
 
@@ -52,7 +52,7 @@ class WP_Remote_Plugin_Command extends WP_Remote_Command {
 	 * Activate a given plugin on the remote site.
 	 *
 	 * @subcommand activate
-	 * @synopsis <plugin-slug> --site-id=<site-id>
+	 * @synopsis <plugin> --site-id=<site-id>
 	 */
 	public function activate( $args, $assoc_args ) {
 
@@ -67,7 +67,7 @@ class WP_Remote_Plugin_Command extends WP_Remote_Command {
 	 * Deactivate a given plugin on the remote site.
 	 *
 	 * @subcommand deactivate
-	 * @synopsis <plugin-slug> --site-id=<site-id>
+	 * @synopsis <plugin> --site-id=<site-id>
 	 */
 	public function deactivate( $args, $assoc_args ) {
 
@@ -82,7 +82,7 @@ class WP_Remote_Plugin_Command extends WP_Remote_Command {
 	 * Update a given plugin on the remote site.
 	 *
 	 * @subcommand update
-	 * @synopsis <plugin-slug> --site-id=<site-id>
+	 * @synopsis <plugin> --site-id=<site-id>
 	 */
 	public function update( $args, $assoc_args ) {
 
@@ -97,7 +97,7 @@ class WP_Remote_Plugin_Command extends WP_Remote_Command {
 	 * Uninstall a given plugin on the remote site.
 	 *
 	 * @subcommand uninstall
-	 * @synopsis <plugin-slug> --site-id=<site-id>
+	 * @synopsis <plugin> --site-id=<site-id>
 	 */
 	public function uninstall( $args, $assoc_args ) {
 
@@ -112,7 +112,7 @@ class WP_Remote_Plugin_Command extends WP_Remote_Command {
 	 * Lock updates on a given plugin for the remote site.
 	 *
 	 * @subcommand lock-update
-	 * @synopsis <plugin-slug> --site-id=<site-id>
+	 * @synopsis <plugin> --site-id=<site-id>
 	 */
 	public function lock_update( $args, $assoc_args ) {
 
@@ -127,7 +127,7 @@ class WP_Remote_Plugin_Command extends WP_Remote_Command {
 	 * Unlock updates on a given plugin for the remote site.
 	 *
 	 * @subcommand unlock-update
-	 * @synopsis <plugin-slug> --site-id=<site-id>
+	 * @synopsis <plugin> --site-id=<site-id>
 	 */
 	public function unlock_update( $args, $assoc_args ) {
 
