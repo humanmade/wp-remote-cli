@@ -89,7 +89,7 @@ class WP_Remote_Site_Command extends WP_Remote_Command {
 		$this->set_account();
 
 		$args = array(
-			'endpoint'     => '/site/' . (int)$site_id . '/refresh_data',
+			'endpoint'     => '/site/' . (int)$site_id . '/refresh-data',
 			'method'       => 'POST',
 			);
 		$response = $this->api_request( $args );
