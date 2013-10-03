@@ -267,7 +267,7 @@ class WP_Remote_Backup_Command extends WP_Remote_Command {
 		$rules = explode( ',', $args[0] );
 
 		$args = array(
-			'endpoint'     => '/site/' . $site_id . '/backup/enable-auto-backup',
+			'endpoint'     => '/site/' . $site_id . '/backup/auto-backup',
 			'method'       => 'POST',
 		);
 
@@ -293,8 +293,8 @@ class WP_Remote_Backup_Command extends WP_Remote_Command {
 		$rules = explode( ',', $args[0] );
 
 		$args = array(
-			'endpoint'     => '/site/' . $site_id . '/backup/disable-auto-backup',
-			'method'       => 'POST',
+			'endpoint'     => '/site/' . $site_id . '/backup/auto-backup',
+			'method'       => 'DELETE',
 		);
 
 		$response = $this->api_request( $args );
