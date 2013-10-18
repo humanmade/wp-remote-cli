@@ -18,7 +18,7 @@ class WP_Remote_Option_Command extends WP_Remote_Command {
 	 * Update an option on a remote Site.
 	 *
 	 * @subcommand Update
-	 * @synopsis <option-name> --site-id=<site-id>
+	 * @synopsis <option-name> <option-value> --site-id=<site-id>
 	 */
 	public function update( $args, $assoc_args ) {
 		$this->perform_option_action( 'update', $args, $assoc_args );
