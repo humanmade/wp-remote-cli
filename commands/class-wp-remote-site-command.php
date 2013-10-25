@@ -151,16 +151,22 @@ class WP_Remote_Site_Command extends WP_Remote_Command {
 	 * Download a remote site.
 	 * 
 	 * @subcommand download
-	 * @synopsis --site-id=<site-id>
+	 * @synopsis --site-id=<site-id> [--type=<type>]
 	 */
 	public function download( $args, $assoc_args ) {
 
 		$site_id = $assoc_args['site-id'];
 		$this->set_account();
 
+		if ( empty( $assoc_args['type'] ) )
+			$assoc_args['type'] = 'complete';
+
 		$args = array(
 			'endpoint'     => '/site/' . $site_id . '/download',
 			'method'       => 'POST',
+			'body'         => array(
+				'type'     => $assoc_args['type'],
+				),
 			);
 
 		$response = $this->api_request( $args );
