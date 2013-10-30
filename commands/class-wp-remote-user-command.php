@@ -303,4 +303,4 @@ class WP_Remote_User_Command extends WP_Remote_Command {
 
 }
 
-WP_CLI::add_command( 'remote-user', 'WP_Remote_User_Command' );
+WP_CLI::add_command( 'remote user', 'WP_Remote_User_Command' );

@@ -202,4 +202,4 @@ class WP_Remote_Site_Command extends WP_Remote_Command {
 
 }
 
-WP_CLI::add_command( 'remote-site', 'WP_Remote_Site_Command' );
+WP_CLI::add_command( 'remote site', 'WP_Remote_Site_Command' );

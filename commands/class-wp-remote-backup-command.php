@@ -306,4 +306,4 @@ class WP_Remote_Backup_Command extends WP_Remote_Command {
 	}
 }
 
-WP_CLI::add_command( 'remote-backup', 'WP_Remote_Backup_Command' );
+WP_CLI::add_command( 'remote backup', 'WP_Remote_Backup_Command' );
