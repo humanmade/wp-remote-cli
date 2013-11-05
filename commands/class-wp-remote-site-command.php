@@ -161,6 +161,8 @@ class WP_Remote_Site_Command extends WP_Remote_Command {
 		if ( empty( $assoc_args['type'] ) )
 			$assoc_args['type'] = 'complete';
 
+		WP_CLI::line( sprintf( "Initiating %s archive.", $assoc_args['type'] ) );
+
 		$args = array(
 			'endpoint'     => '/site/' . $site_id . '/download',
 			'method'       => 'POST',
@@ -174,14 +176,7 @@ class WP_Remote_Site_Command extends WP_Remote_Command {
 		if ( is_wp_error( $response ) )
 			WP_CLI::error( $response->get_error_message() );
 
-		WP_CLI::line( "Initiated site archive." );
-
 		do {
-
-			if ( ! empty( $response->status ) ) {
-				WP_Cli::line( 'Backup status: ' . $response->status );
-				sleep( 15 );
-			}
 
 			$args = array(
 			'endpoint'     => '/site/' . $site_id . '/download',
@@ -189,6 +184,13 @@ class WP_Remote_Site_Command extends WP_Remote_Command {
 			);
 
 			$response = $this->api_request( $args );
+
+			if ( ! is_wp_error( $response ) 
+				&& ! empty( $response->status )
+				&& $response->status == 'error-status' ) {
+				WP_Cli::line( 'Backup status: ' . strip_tags( $response->backup_progress ) );
+				sleep( 15 );
+			}
 
 		} while ( ! is_wp_error( $response ) && $response->status != 'backup-complete' );
 
