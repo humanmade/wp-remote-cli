@@ -44,8 +44,8 @@ class WP_Remote_Site_Command extends WP_Remote_Command {
 				'page'     => (int)$assoc_args['page'],
 				'type'     => $assoc_args['type'],
 				'action'   => $assoc_args['action'],
-				'start_date' => $assoc_args['start-date'],
-				'end_date'   => $assoc_args['end-date'],
+				'start_timestamp' => ( $assoc_args['start-date'] ) ? strtotime( $assoc_args['start-date'] ) : '',
+				'end_timestamp'   => ( $assoc_args['end-date'] ) ? strtotime( $assoc_args['end-date'] ) : '',
 				),
 			);
 		$response = $this->api_request( $args );
