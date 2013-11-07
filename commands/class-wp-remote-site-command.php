@@ -15,7 +15,7 @@ class WP_Remote_Site_Command extends WP_Remote_Command {
 	 * View the history for a given site.
 	 *
 	 * @subcommand list-history
-	 * @synopsis --site-id=<site-id> [--<field>=<value>] [--per-page=<per-page>] [--page=<page>] [--format=<format>]
+	 * @synopsis --site-id=<site-id> [--type=<type>] [--action=<action>] [--start-date=<start-date>] [--end-date=<end-date>] [--per-page=<per-page>] [--page=<page>] [--format=<format>]
 	 */
 	public function list_history( $args, $assoc_args ) {
 
@@ -25,6 +25,10 @@ class WP_Remote_Site_Command extends WP_Remote_Command {
 		$defaults = array(
 				'per-page'    => 10,
 				'page'        => 1,
+				'type'        => '',
+				'action'      => '',
+				'start-date'  => false,
+				'end-date'    => false,
 				'fields'      => implode( ',', $this->history_fields ),
 				'format'      => 'table',
 			);
@@ -37,7 +41,11 @@ class WP_Remote_Site_Command extends WP_Remote_Command {
 			'method'       => 'GET',
 			'body'         => array(
 				'per_page' => (int)$assoc_args['per-page'],
-				'page'     => (int)$assoc_args['page']
+				'page'     => (int)$assoc_args['page'],
+				'type'     => $assoc_args['type'],
+				'action'   => $assoc_args['action'],
+				'start_timestamp' => ( $assoc_args['start-date'] ) ? strtotime( $assoc_args['start-date'] ) : '',
+				'end_timestamp'   => ( $assoc_args['end-date'] ) ? strtotime( $assoc_args['end-date'] ) : '',
 				),
 			);
 		$response = $this->api_request( $args );
@@ -57,14 +65,6 @@ class WP_Remote_Site_Command extends WP_Remote_Command {
 
 			// 'date' is already delivered as a timestamp
 			$site_history_item->date = date( 'Y-m-d H:i:s', $site_history_item->date ) . ' GMT';
-
-			// Allow filtering based on field
-			$continue = false;
-			foreach( $this->history_fields as $site_history_field ) {
-				if ( isset( $assoc_args[$site_history_field] ) 
-					&& $response_history_item->$site_history_field != $assoc_args[$site_history_field] )
-					$continue = true;
-			}
 
 			if ( $continue )
 				continue;
