@@ -50,7 +50,7 @@ class WP_Remote_Site_Command extends WP_Remote_Command {
 			);
 
 		if ( ! empty( $assoc_args['site-id'] ) )
-			$args['body']['site_ids'] = $assoc_args['site-id'];	
+			$args['body']['site_id'] = $assoc_args['site-id'];	
 
 		$response = $this->api_request( $args );
 		if ( is_wp_error( $response ) )
