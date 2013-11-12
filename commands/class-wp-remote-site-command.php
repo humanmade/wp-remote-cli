@@ -15,7 +15,7 @@ class WP_Remote_Site_Command extends WP_Remote_Command {
 	 * View the history for a given site.
 	 *
 	 * @subcommand list-history
-	 * @synopsis --site-id=<site-id> [--type=<type>] [--action=<action>] [--start-date=<start-date>] [--end-date=<end-date>] [--per-page=<per-page>] [--page=<page>] [--format=<format>]
+	 * @synopsis [--site-id=<site-id>] [--type=<type>] [--action=<action>] [--start-date=<start-date>] [--end-date=<end-date>] [--per-page=<per-page>] [--page=<page>] [--format=<format>]
 	 */
 	public function list_history( $args, $assoc_args ) {
 
@@ -37,9 +37,10 @@ class WP_Remote_Site_Command extends WP_Remote_Command {
 		$this->set_account();
 
 		$args = array(
-			'endpoint'     => '/site/' . $site_id . '/history/',
+			'endpoint'     => '/site/history/',
 			'method'       => 'GET',
 			'body'         => array(
+				'site_ids' => ( ! empty( $assoc_args['site-id'] ) ) ? $assoc_args['site-id'] : '',
 				'per_page' => (int)$assoc_args['per-page'],
 				'page'     => (int)$assoc_args['page'],
 				'type'     => $assoc_args['type'],
