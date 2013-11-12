@@ -40,7 +40,6 @@ class WP_Remote_Site_Command extends WP_Remote_Command {
 			'endpoint'     => '/site/history/',
 			'method'       => 'GET',
 			'body'         => array(
-				'site_ids' => ( ! empty( $assoc_args['site-id'] ) ) ? $assoc_args['site-id'] : '',
 				'per_page' => (int)$assoc_args['per-page'],
 				'page'     => (int)$assoc_args['page'],
 				'type'     => $assoc_args['type'],
@@ -49,6 +48,10 @@ class WP_Remote_Site_Command extends WP_Remote_Command {
 				'end_timestamp'   => ( $assoc_args['end-date'] ) ? strtotime( $assoc_args['end-date'] ) : '',
 				),
 			);
+
+		if ( ! empty( $assoc_args['site-id'] ) )
+			$args['body']['site_ids'] = $assoc_args['site-id'];	
+
 		$response = $this->api_request( $args );
 		if ( is_wp_error( $response ) )
 			WP_CLI::error( $response->get_error_message() );
