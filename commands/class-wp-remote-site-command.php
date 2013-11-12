@@ -19,8 +19,8 @@ class WP_Remote_Site_Command extends WP_Remote_Command {
 	 */
 	public function list_history( $args, $assoc_args ) {
 
-		$site_id = $assoc_args['site-id'];
-		unset( $assoc_args['site-id'] );
+		if ( empty( $assoc_args['site-id'] ) || ( count( explode( ',', $assoc_args['site-id'] ) ) != 1 ) )
+			array_unshift( $this->history_fields, 'site_name' );
 
 		$defaults = array(
 				'per-page'    => 10,
