@@ -15,12 +15,12 @@ class WP_Remote_Site_Command extends WP_Remote_Command {
 	 * View the history for a given site.
 	 *
 	 * @subcommand list-history
-	 * @synopsis --site-id=<site-id> [--type=<type>] [--action=<action>] [--start-date=<start-date>] [--end-date=<end-date>] [--per-page=<per-page>] [--page=<page>] [--format=<format>]
+	 * @synopsis [--site-id=<site-id>] [--type=<type>] [--action=<action>] [--start-date=<start-date>] [--end-date=<end-date>] [--per-page=<per-page>] [--page=<page>] [--format=<format>]
 	 */
 	public function list_history( $args, $assoc_args ) {
 
-		$site_id = $assoc_args['site-id'];
-		unset( $assoc_args['site-id'] );
+		if ( empty( $assoc_args['site-id'] ) || ( count( explode( ',', $assoc_args['site-id'] ) ) != 1 ) )
+			array_unshift( $this->history_fields, 'site_name' );
 
 		$defaults = array(
 				'per-page'    => 10,
@@ -37,7 +37,7 @@ class WP_Remote_Site_Command extends WP_Remote_Command {
 		$this->set_account();
 
 		$args = array(
-			'endpoint'     => '/site/' . $site_id . '/history/',
+			'endpoint'     => '/site/history/',
 			'method'       => 'GET',
 			'body'         => array(
 				'per_page' => (int)$assoc_args['per-page'],
@@ -48,6 +48,10 @@ class WP_Remote_Site_Command extends WP_Remote_Command {
 				'end_timestamp'   => ( $assoc_args['end-date'] ) ? strtotime( $assoc_args['end-date'] ) : '',
 				),
 			);
+
+		if ( ! empty( $assoc_args['site-id'] ) )
+			$args['body']['site_id'] = $assoc_args['site-id'];	
+
 		$response = $this->api_request( $args );
 		if ( is_wp_error( $response ) )
 			WP_CLI::error( $response->get_error_message() );
