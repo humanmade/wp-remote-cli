@@ -47,6 +47,8 @@ class WP_Remote_CRUD_Command extends WP_Remote_Command {
 				$method = 'GET';
 				$api_args = $assoc_args;
 
+				break;
+
 			case 'update':
 
 				list( $obj_id ) = $args;
@@ -87,16 +89,19 @@ class WP_Remote_CRUD_Command extends WP_Remote_Command {
 					if ( !is_object( $item ) )
 						return $item;
 
+					if ( 'user' == $this->obj_type )
+						$item->roles = implode( ',', $item->roles );
+
 					return $item;
 				} );
 
-				WP_CLI\Utils\format_items( $params['format'], $it, $fields );
+				WP_CLI\Utils\format_items( $format, $it, $fields );
 
 				break;
 
 			case 'get':
 
-				$this->show_multiple_fields( $response, $assoc_args );
+				$this->show_multiple_fields( $response, array( 'format' => $format, 'fields' => $fields ) );
 
 				break;
 
@@ -121,7 +126,7 @@ class WP_Remote_CRUD_Command extends WP_Remote_Command {
 		switch ( $assoc_args['format'] ) {
 
 			case 'table':
-				\WP_CLI\Utils\assoc_array_to_table( $obj_data );
+				$this->assoc_array_to_table( $obj_data );
 				break;
 
 			case 'json':
@@ -133,6 +138,23 @@ class WP_Remote_CRUD_Command extends WP_Remote_Command {
 				break;
 
 		}
+	}
+
+	protected function assoc_array_to_table( $obj_data ) {
+		$rows = array();
+
+		foreach ( $obj_data as $field => $value ) {
+			if ( ! is_string( $value ) ) {
+					$value = json_encode( $value );
+			}
+
+			$rows[] = (object) array(
+					'Field' => $field,
+					'Value' => $value
+			);
+		}
+
+		WP_CLI\Utils\format_items( 'table', $rows, array( 'Field', 'Value' ) );
 	}
 
 	protected function show_single_field( $obj, $field ) {

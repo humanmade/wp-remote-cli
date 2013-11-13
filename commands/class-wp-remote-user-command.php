@@ -2,9 +2,11 @@
 /**
  * Manage users for a remote site.
  */
-class WP_Remote_User_Command extends WP_Remote_Command {
+class WP_Remote_User_Command extends WP_Remote_CRUD_Command {
 
-	private $fields = array(
+	protected $obj_type = 'user';
+
+	protected $obj_fields = array(
 		'ID',
 		'user_login',
 		'display_name',
@@ -33,41 +35,7 @@ class WP_Remote_User_Command extends WP_Remote_Command {
 	 * @subcommand list
 	 */
 	public function _list( $args, $assoc_args ) {
-
-		$defaults = array(
-			'fields'    => implode( ',', $this->fields ),
-			'format'    => 'table',
-		);
-		$params = array_merge( $defaults, $assoc_args );
-
-		$fields = $params['fields'];
-		unset( $params['fields'] );
-
-		$site_id = $assoc_args['site-id'];
-		unset( $assoc_args['site-id'] );
-
-		$this->set_account();
-
-		$args = array(
-			'endpoint' => 'site/' . (int)$site_id . '/user',
-			'method'   => 'GET',
-			'body'     => $params,
-			);
-		$response = $this->api_request( $args );
-
-		if ( is_wp_error( $response ) )
-			WP_CLI::error( $response->get_error_message() );
-
-		$it = WP_CLI\Utils\iterator_map( $response, function ( $user ) {
-			if ( !is_object( $user ) )
-				return $user;
-
-			$user->roles = implode( ',', $user->roles );
-
-			return $user;
-		} );
-
-		WP_CLI\Utils\format_items( $params['format'], $it, $fields );
+		$this->perform_item_action( 'list', $args, $assoc_args );
 	}
 
 	/**
@@ -146,8 +114,8 @@ class WP_Remote_User_Command extends WP_Remote_Command {
 	 *
 	 * ## OPTIONS
 	 *
-	 * <user>
-	 * : The user login or ID of the user to update.
+	 * <id>
+	 * : The ID of the user to update.
 	 *
 	 * --<field>=<value>
 	 * : One or more fields to update. For accepted fields, see wp_update_user().
@@ -156,25 +124,7 @@ class WP_Remote_User_Command extends WP_Remote_Command {
 	 * : Site to run the command on.
 	 */
 	public function update( $args, $assoc_args ) {
-
-		list( $user ) = $args;
-
-		$site_id = $assoc_args['site-id'];
-		unset( $assoc_args['site-id'] );
-
-		$this->set_account();
-
-		$args = array(
-			'endpoint' => 'site/' . (int)$site_id . '/user/' . $user,
-			'method'   => 'POST',
-			'body'     => $assoc_args,
-			);
-		$response = $this->api_request( $args );
-
-		if ( is_wp_error( $response ) )
-			WP_CLI::error( $response->get_error_message() );
-
-		WP_CLI::success( "User updated." );
+		$this->perform_item_action( 'update', $args, $assoc_args );
 	}
 
 	/**
@@ -199,38 +149,7 @@ class WP_Remote_User_Command extends WP_Remote_Command {
 	 * : Site to run the command on.
 	 */
 	public function get( $args, $assoc_args ) {
-
-		list( $user ) = $args;
-
-		$site_id = $assoc_args['site-id'];
-		unset( $assoc_args['site-id'] );
-
-		$defaults = array(
-			'format'     => 'table',
-			);
-		$assoc_args = array_merge( $defaults, $assoc_args );
-		
-		$this->set_account();
-
-		$args = array(
-			'endpoint' => 'site/' . (int)$site_id . '/user/' . $user,
-			'method'   => 'GET',
-			);
-		$response = $this->api_request( $args );
-
-		if ( is_wp_error( $response ) )
-			WP_CLI::error( $response->get_error_message() );
-
-		$user = $response;
-
-		$user_data = (array) $user;
-		$user_data['roles'] = implode( ', ', $user->roles );
-
-		if ( isset( $assoc_args['field'] ) ) {
-			$this->show_single_field( (object) $user_data, $assoc_args['field'] );
-		} else {
-			$this->show_multiple_fields( $user_data, $assoc_args );
-		}
+		$this->perform_item_action( 'get', $args, $assoc_args );
 	}
 
 	/**
@@ -238,67 +157,14 @@ class WP_Remote_User_Command extends WP_Remote_Command {
 	 *
 	 * ## OPTIONS
 	 *
-	 * <user>
-	 * : The user login or ID of the user to delete.
+	 * <id>
+	 * : The ID of the user to delete.
 	 * 
 	 * --site-id=<site-id>
 	 * : Site to run the command on.
 	 */
 	public function delete( $args, $assoc_args ) {
-
-		list( $user ) = $args;
-
-		$site_id = $assoc_args['site-id'];
-		unset( $assoc_args['site-id'] );
-		
-		$this->set_account();
-
-		$args = array(
-			'endpoint' => 'site/' . (int)$site_id . '/user/' . $user,
-			'method'   => 'DELETE',
-			);
-		$response = $this->api_request( $args );
-
-		if ( is_wp_error( $response ) )
-			WP_CLI::error( $response->get_error_message() );
-
-		WP_CLI::success( "User deleted." );
-
-	}
-
-	private function show_multiple_fields( $user_data, $assoc_args ) {
-		switch ( $assoc_args['format'] ) {
-
-		case 'table':
-			\WP_CLI\Utils\assoc_array_to_table( $user_data );
-			break;
-
-		case 'json':
-			WP_CLI::print_value( $user_data, $assoc_args );
-			break;
-
-		default:
-			\WP_CLI::error( "Invalid format: " . $assoc_args['format'] );
-			break;
-
-		}
-	}
-
-	protected function show_single_field( $user, $field ) {
-		$value = null;
-
-		foreach ( array( $field, 'user_' . $field ) as $key ) {
-			if ( isset( $user->$key ) ) {
-				$value = $user->$key;
-				break;
-			}
-		}
-
-		if ( null === $value ) {
-			\WP_CLI::error( "Invalid user field: $field." );
-		} else {
-			\WP_CLI::print_value( $value );
-		}
+		$this->perform_item_action( 'delete', $args, $assoc_args );
 	}
 
 }
