@@ -2,7 +2,7 @@
 /**
  * Create, Read, Update, and Delete items on a remote site.
  */
-class WP_Remote_CRUD_Command extends WP_Remote_Command {
+class WP_Remote_CRUD_Object_Command extends WP_Remote_Command {
 
 	/**
 	 * Perform a action on an item on a remote site

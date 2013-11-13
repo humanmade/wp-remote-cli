@@ -2,7 +2,7 @@
 /**
  * Manage users for a remote site.
  */
-class WP_Remote_User_Command extends WP_Remote_CRUD_Command {
+class WP_Remote_User_Command extends WP_Remote_CRUD_Object_Command {
 
 	protected $obj_type = 'user';
 
