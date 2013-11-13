@@ -71,42 +71,10 @@ class WP_Remote_User_Command extends WP_Remote_CRUD_Command {
 	 */
 	public function create( $args, $assoc_args ) {
 
-		list( $user_login, $user_email ) = $args;
+		$assoc_args['user_login'] = $args[0];
+		$assoc_args['user_email'] = $args[1];
 
-		$site_id = $assoc_args['site-id'];
-		unset( $assoc_args['site-id'] );
-
-		$defaults = array(
-			'role'            => false,
-			'user_pass'       => false,
-			'user_registered' => false,
-			'display_name'    => false,
-		);
-		$assoc_args = array_merge( $defaults, $assoc_args );
-
-		$assoc_args['user_login'] = $user_login;
-		$assoc_args['user_email'] = $user_email;
-
-		$this->set_account();
-
-		$args = array(
-			'endpoint' => 'site/' . (int)$site_id . '/user',
-			'method'   => 'POST',
-			'body'     => $assoc_args,
-			);
-		$response = $this->api_request( $args );
-
-		if ( is_wp_error( $response ) )
-			WP_CLI::error( $response->get_error_message() );
-
-		if ( isset( $assoc_args['porcelain'] ) ) {
-			WP_CLI::line( $response->ID );
-		} else {
-			WP_CLI::success( "Created user {$response->ID}." );
-			// Password was generated on remote site.
-			if ( ! $assoc_args['user_pass'] )
-				WP_CLI::line( "Password: {$response->user_pass}" );
-		}
+		$this->perform_item_action( 'create', $args, $assoc_args );
 	}
 
 	/**

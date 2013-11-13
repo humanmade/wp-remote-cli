@@ -49,6 +49,14 @@ class WP_Remote_CRUD_Command extends WP_Remote_Command {
 
 				break;
 
+			case 'create':
+
+				$endpoint = 'site/' . (int)$site_id . '/' . $this->obj_type;
+				$method = 'POST';
+				$api_args = $assoc_args;
+
+				break;
+
 			case 'update':
 
 				list( $obj_id ) = $args;
@@ -102,6 +110,12 @@ class WP_Remote_CRUD_Command extends WP_Remote_Command {
 			case 'get':
 
 				$this->show_multiple_fields( $response, array( 'format' => $format, 'fields' => $fields ) );
+
+				break;
+
+			case 'create':
+				
+				WP_CLI::success( "Created {$this->obj_type}." );
 
 				break;
 
