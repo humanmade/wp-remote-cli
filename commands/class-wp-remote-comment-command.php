@@ -36,6 +36,16 @@ class WP_Remote_Comment_Command extends WP_Remote_CRUD_Command {
 	}
 
 	/**
+	 * Create a comment on a remote Site.
+	 *
+	 * @subcommand create
+	 * @synopsis --<field>=<value> --site-id=<site-id>
+	 */
+	public function create( $args, $assoc_args ) {
+		$this->perform_item_action( 'create', $args, $assoc_args );
+	}
+
+	/**
 	 * Update a comment on a remote Site.
 	 *
 	 * @subcommand update
