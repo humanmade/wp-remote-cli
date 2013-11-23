@@ -104,6 +104,104 @@ class WP_Remote_Site_Command extends WP_Remote_Command {
 	}
 
 	/**
+	 * Get the current status of the deployed site.
+	 * 
+	 * @subcommand get-deploy-status
+	 * @synopsis --site-id=<site-id>
+	 */
+	public function get_deploy_status( $args, $assoc_args ){
+
+		$site_id = $assoc_args['site-id'];
+		unset( $assoc_args['site-id'] );
+
+		$this->set_account();
+
+		$args = array(
+			'endpoint'     => '/site/' . (int)$site_id . '/deploy',
+			'method'       => 'GET',
+			);
+
+		$response = $this->api_request( $args );
+		if ( is_wp_error( $response ) )
+			WP_CLI::error( $response->get_error_message() );
+
+		error_log( var_export( $response, true ) );
+
+		WP_CLI::success( "Site deployed." );
+
+	}
+
+	/**
+	 * Deploy to the current version of the remote site.
+	 * 
+	 * @subcommand deploy
+	 * @synopsis --site-id=<site-id> [--branch=<branch>]
+	 */
+	public function deploy( $args, $assoc_args ){
+
+		$site_id = $assoc_args['site-id'];
+		unset( $assoc_args['site-id'] );
+
+		$this->set_account();
+
+		$args = array(
+			'endpoint'     => '/site/' . (int)$site_id . '/deploy',
+			'method'       => 'POST',
+			);
+		if ( ! empty( $assoc_args['branch'] ) )
+			$args['body'] = array(
+				'branch' => $assoc_args['branch'],
+				);
+
+		$response = $this->api_request( $args );
+		if ( is_wp_error( $response ) )
+			WP_CLI::error( $response->get_error_message() );
+
+		WP_CLI::success( "Site deployed." );
+
+	}
+
+	/**
+	 * Update the deployment settings for the remote site.
+	 * 
+	 * @subcommand update-deploy-settings
+	 * @synopsis <method> --site-id=<site-id> [--<field>=<value>]
+	 */
+	public function update_deploy_settings( $args, $assoc_args ) {
+
+		list( $method ) = $args;
+
+		$site_id = $assoc_args['site-id'];
+		unset( $assoc_args['site-id'] );
+
+		$this->set_account();
+
+		$args = array(
+			'endpoint'     => '/site/' . (int)$site_id . '/deploy/method',
+			'method'       => 'POST',
+			'body'         => array(
+				'method'   => $method,
+				),
+			);
+
+		$response = $this->api_request( $args );
+		if ( is_wp_error( $response ) )
+			WP_CLI::error( $response->get_error_message() );
+
+		$args = array(
+			'endpoint'     => '/site/' . (int)$site_id . '/deploy/method/' . $method,
+			'method'       => 'POST',
+			'body'         => $assoc_args,
+			);
+
+		$response = $this->api_request( $args );
+		if ( is_wp_error( $response ) )
+			WP_CLI::error( $response->get_error_message() );
+
+		WP_CLI::success( "Deployment settings updated." );
+	}
+
+	/**
 	 * Lock all updates for the remote site.
 	 * 
 	 * @subcommand lock-update
