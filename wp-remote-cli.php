@@ -18,4 +18,5 @@ require_once dirname( __FILE__ ) . '/commands/class-wp-remote-user-command.php';
 require_once dirname( __FILE__ ) . '/commands/class-wp-remote-user-meta-command.php';
 require_once dirname( __FILE__ ) . '/commands/class-wp-remote-site-command.php';
 require_once dirname( __FILE__ ) . '/commands/class-wp-remote-backup-command.php';
+require_once dirname( __FILE__ ) . '/commands/class-wp-remote-webhook-command.php';
 
