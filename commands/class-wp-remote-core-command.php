@@ -70,4 +70,4 @@ class WP_Remote_Core_Command extends WP_Remote_Command {
 
 }
 
-WP_CLI::add_command( 'remote-core', 'WP_Remote_Core_Command' );
+WP_CLI::add_command( 'remote core', 'WP_Remote_Core_Command' );

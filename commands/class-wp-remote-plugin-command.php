@@ -140,4 +140,4 @@ class WP_Remote_Plugin_Command extends WP_Remote_Command {
 
 }
 
-WP_CLI::add_command( 'remote-plugin', 'WP_Remote_Plugin_Command' );
+WP_CLI::add_command( 'remote plugin', 'WP_Remote_Plugin_Command' );

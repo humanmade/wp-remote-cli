@@ -92,4 +92,4 @@ class WP_Remote_Option_Command extends WP_Remote_Command {
 
 }
 
-WP_CLI::add_command( 'remote-option', 'WP_Remote_Option_Command' );
+WP_CLI::add_command( 'remote option', 'WP_Remote_Option_Command' );

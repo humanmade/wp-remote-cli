@@ -125,4 +125,4 @@ class WP_Remote_Theme_Command extends WP_Remote_Command {
 
 }
 
-WP_CLI::add_command( 'remote-theme', 'WP_Remote_Theme_Command' );
+WP_CLI::add_command( 'remote theme', 'WP_Remote_Theme_Command' );
